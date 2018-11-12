@@ -9,7 +9,8 @@ const viewport = {
     width: 1920, 
     height: 1080 
 }
-let showUI = {headless: false};
+let showUI = {headless: false}
+let showSlowMotion = {headless: false, slowMo: 1000}
 
 beforeEach(async () => {
   browser = await puppeteer.launch()
@@ -117,9 +118,22 @@ describe.only('separateCheckers', async () => {
     await page.goto('http://localhost/quizGameES6/#')
     const element = await page.$('.navbar-brand') !== null
     expect(element).equal(true);
-})  
+  })   
 
-
+  it('list', async () => {  
+    await page.goto('http://localhost/quizGameAngularJS/#!/')
+    await page.waitFor(1000)
+    await page.click('#playAsAUserButton')
+    
+    await page.waitForSelector('.cardCenter');
+    const stories = await page.evaluate(() => {
+    const links = Array.from(document.querySelectorAll('.cardCenter'))
+    return links.map(link => link.href).slice(0, 10)
+    })
+    console.log(stories);
+    // const element = await page.$('.navbar-brand') !== null
+    // expect(element).equal(true);
+  })  
 })
  
 describe('pixelmatch', async () => {
