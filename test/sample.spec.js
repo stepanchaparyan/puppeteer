@@ -1,5 +1,8 @@
 const { expect } = require('chai')
 const puppeteer = require('puppeteer')
+const fs = require('fs')
+const PNG = require('pngjs').PNG
+const pixelmatch = require('pixelmatch')
 
 let browser, page
 const viewport = { 
@@ -9,7 +12,7 @@ const viewport = {
 let showUI = {headless: false};
 
 beforeEach(async () => {
-  browser = await puppeteer.launch(showUI)
+  browser = await puppeteer.launch()
   page = await browser.newPage()
   await page.setViewport(viewport)
 })
@@ -101,13 +104,40 @@ describe('ES6', async () => {
       await page.screenshot({ path: 'screenshots/ES6.png'})
   })     
 })
+
+describe.only('separateCheckers', async () => {
+  it('getElementInnetText', async () => {  
+      await page.goto('http://localhost/quizGameES6/#')
+      await page.waitForSelector('.navbar-brand')
+      const name = await page.$eval('.navbar-brand', el => el.innerText)
+      expect(name).equal('GEOGRAPHY');
+  })
+
+  it('checkElementExisting', async () => {  
+    await page.goto('http://localhost/quizGameES6/#')
+    const element = await page.$('.navbar-brand') !== null
+    expect(element).equal(true);
+})  
+
+
+})
  
-describe('hover', async () => {
-  it('hover', async () => {  
-    await page.goto('https://soundcloud.com/')
-    await page.waitFor(2000)
-    await page.hover('.playableTile__artwork')
-    await page.screenshot({ path: 'screenshots/hover.png' })
+describe('pixelmatch', async () => {
+  it('pixel', async () => {  
+    const img1 = fs.createReadStream('screenshots/Stepan2.png').pipe(new PNG()).on('parsed', doneReading)
+    const img2 = fs.createReadStream('screenshots/Stepan22.png').pipe(new PNG()).on('parsed', doneReading)
+    let filesRead = 0;
+    let numDiffPixel
+
+    function doneReading() {
+        if (++filesRead < 2) return;
+        let diff = new PNG({width: img1.width, height: img1.height});
+        numDiffPixel = pixelmatch(img1.data, img2.data, diff.data, img1.width, img1.height, {threshold: 0.1});
+        console.log("this is: " + numDiffPixel)
+        diff.pack().pipe(fs.createWriteStream('screenshots/diff.png'));
+        //expect(5).equal(10);
+    }
+    expect(numDiffPixel).equal(5);
   })     
 })
 
