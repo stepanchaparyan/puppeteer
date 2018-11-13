@@ -195,21 +195,18 @@ describe.only('loginOne', async () => {
     await page.goto('https://github.com/github')
     await page.waitForSelector('body > div.position-relative.js-header-wrapper > header > div > div.HeaderMenu.d-flex.flex-justify-between.flex-auto > div > span > div > a:nth-child(1)')
     await page.click('body > div.position-relative.js-header-wrapper > header > div > div.HeaderMenu.d-flex.flex-justify-between.flex-auto > div > span > div > a:nth-child(1)')
-    await page.waitFor(4000)
+    await page.waitFor(2000)
     await page.type('#login_field', CREDS.usernameS)
     await page.type('#password', CREDS.passwordS)
     await page.click('#login > form > div.auth-form-body.mt-3 > input.btn.btn-primary.btn-block')
-    await page.waitFor(5000)
+    await page.waitFor(2000)
     cookies = await page.cookies();
-    console.log('1')
   })
 
   it.only('GitLogin', async () => {  
-    console.log('2')
-    const page2 = await browser.newPage();
-    await page2.setCookie(...cookies);
+    const newPage = await browser.newPage();
+    await newPage.setCookie(...cookies);
     await page.goto('https://github.com/github')
-    console.log('3')
     await page.waitFor(9000)
     await page.screenshot({ path: 'screenshots/gitlogin.png' })
   })
