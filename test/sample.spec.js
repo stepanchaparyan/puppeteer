@@ -21,7 +21,7 @@ beforeEach(async () => {
   await page.setViewport(viewport)
 })
 
-describe('sample test', async () => {
+describe('browser version', async () => {
     it('should work', async () => {
       expect(`HeadlessChrome/64.0.3264.0`).to.equal(await browser.version())
     })
@@ -160,6 +160,26 @@ describe('checks', async () => {
     await page.click('#login > form > div.auth-form-body.mt-3 > input.btn.btn-primary.btn-block')
     await page.waitFor(5000)
     await page.screenshot({ path: 'screenshots/gitlogin.png' })
+  })
+
+  it.only('counts of Elements', async () => {  
+    await page.goto('https://www.chaijs.com/guide/')
+    const bodyCounts = await page.$$eval('body', body => body.length);
+    expect(bodyCounts).equal(1)
+
+    await page.goto('https://www.chaijs.com/guide/')
+    const ulCounts = await page.$$eval('ul', ul => ul.length);
+    expect(ulCounts).equal(7)
+
+    await page.goto('https://www.chaijs.com/guide/')
+    const elhref = await page.$eval('#assertion-styles > a', el => el.href);
+    expect(elhref).equal('https://www.chaijs.com/guide/styles/')
+
+    await page.goto('https://www.chaijs.com/guide/')
+    const elValue = await page.$eval('#welcome-to-chai', el => el.innerText);
+    expect(elValue).equal('Welcome to Chai')
+    
+
   })
   
 })
