@@ -13,9 +13,10 @@ const viewport = {
 }
 let showUI = {headless: false}
 let showSlowMotion = {headless: false, slowMo: 1000}
+let ignoreHTTPSErrors = {ignoreHTTPSErrors: true, headless: false, timeout: 0 }
 
 beforeEach(async () => {
-  browser = await puppeteer.launch( {ignoreHTTPSErrors: true, headless: false, timeout: 0 } )
+  browser = await puppeteer.launch()
   page = await browser.newPage()
   await page.setViewport(viewport)
 })
@@ -158,75 +159,43 @@ describe('checks', async () => {
     await page.type('#password', CREDS.passwordS)
     await page.click('#login > form > div.auth-form-body.mt-3 > input.btn.btn-primary.btn-block')
     await page.waitFor(5000)
-    const cookiesObject = await page.cookies()
-    console.log(cookiesObject)
     await page.screenshot({ path: 'screenshots/gitlogin.png' })
   })
-
-  it('getElementInnerText', async () => {  
-      await page.goto('https://app.webtrends-optimize.com/optimize/manage/assets')
-      await page.waitForSelector('#emailInput')
-      const name = await page.$eval('.navbar-brand', el => el.innerText)
-      expect(name).equal('GEOGRAPHY');
-  })
-
-  it('checkElementExisting', async () => {  
-    await page.goto('http://localhost/quizGameES6/#')
-    const element = await page.$('.navbar-brand') !== null
-    expect(element).equal(true);
-  })   
-
-  it('checkContinentsList', async () => {  
-    await page.goto('http://localhost/quizGameAngularJS/#!/')
-    await page.waitFor(1000)
-    await page.click('#playAsAUserButton')
-    await page.waitForSelector('.cardContinent');
-    const continents = await page.evaluate(() => {
-    const cards = Array.from(document.querySelectorAll('.cardContinent'))
-    return cards.map(card => card.innerText).slice(0, 10)
-    })
-    expect(continents).to.eql([ 'Asia', 'Europe', 'Africa', 'Americas', 'Oceania', 'World' ]);
-  })  
+  
 })
 
-describe.only('loginOne', async () => {
-  var cookies
+describe('loginBeforeAll', async () => {
   beforeEach(async () => {
-    await page.goto('https://github.com/github')
+    await page.goto('https://github.com/stepanchaparyan')
     await page.waitForSelector('body > div.position-relative.js-header-wrapper > header > div > div.HeaderMenu.d-flex.flex-justify-between.flex-auto > div > span > div > a:nth-child(1)')
     await page.click('body > div.position-relative.js-header-wrapper > header > div > div.HeaderMenu.d-flex.flex-justify-between.flex-auto > div > span > div > a:nth-child(1)')
-    await page.waitFor(2000)
     await page.type('#login_field', CREDS.usernameS)
     await page.type('#password', CREDS.passwordS)
     await page.click('#login > form > div.auth-form-body.mt-3 > input.btn.btn-primary.btn-block')
     await page.waitFor(2000)
-    cookies = await page.cookies();
   })
 
-  it.only('GitLogin', async () => {  
-    const newPage = await browser.newPage();
-    await newPage.setCookie(...cookies);
-    await page.goto('https://github.com/github')
+  it('GitLogin', async () => {  
+    await page.goto('https://github.com/stepanchaparyan')
     await page.waitFor(9000)
     await page.screenshot({ path: 'screenshots/gitlogin.png' })
   })
 
   it('checkElementExisting', async () => {  
-    await page.goto('http://localhost/quizGameES6/#')
-    const element = await page.$('.navbar-brand') !== null
-    expect(element).equal(true);
+    await page.goto('https://github.com/stepanchaparyan')
+    const element = await page.$('#js-pjax-container > div > div.signup-prompt-bg.rounded-1 > div > div > a') !== null
+    expect(element).equal(false);
+    await page.screenshot({ path: 'screenshots/gitlogin2.png' })
   })   
 
-  it('checkContinentsList', async () => {  
-    await page.goto('http://localhost/quizGameAngularJS/#!/')
-    await page.waitFor(1000)
-    await page.click('#playAsAUserButton')
-    await page.waitForSelector('.cardContinent');
-    const continents = await page.evaluate(() => {
-    const cards = Array.from(document.querySelectorAll('.cardContinent'))
-    return cards.map(card => card.innerText).slice(0, 10)
+  it('checkList', async () => {  
+    await page.goto('https://github.com/stepanchaparyan')
+    const myRepos = await page.evaluate(() => {
+    const repos = Array.from(document.querySelectorAll('.js-repo'))
+    return repos.map(repo => repo.innerText).slice(0, 10)
     })
-    expect(continents).to.eql([ 'Asia', 'Europe', 'Africa', 'Americas', 'Oceania', 'World' ]);
+    expect(myRepos).to.eql([ 'webMyPersonalPage','quizGameES6','quizGameAngularJS','DeliverAngular5','android_itc','puppeteer' ]
+  );
   })  
 })
  
