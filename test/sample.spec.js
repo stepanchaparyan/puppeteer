@@ -1,4 +1,8 @@
 const { expect } = require('chai')
+
+var chai = require('chai')
+chai.use(require('chai-dom'))
+
 const puppeteer = require('puppeteer')
 const fs = require('fs')
 const PNG = require('pngjs').PNG
@@ -162,7 +166,7 @@ describe('checks', async () => {
     await page.screenshot({ path: 'screenshots/gitlogin.png' })
   })
 
-  it.only('counts of Elements', async () => {  
+  it('counts of Elements', async () => {  
     await page.goto('https://www.chaijs.com/guide/')
     const bodyCounts = await page.$$eval('body', body => body.length);
     expect(bodyCounts).equal(1)
@@ -179,7 +183,6 @@ describe('checks', async () => {
     const elValue = await page.$eval('#welcome-to-chai', el => el.innerText);
     expect(elValue).equal('Welcome to Chai')
     
-
   })
   
 })
@@ -201,12 +204,17 @@ describe('loginBeforeAll', async () => {
     await page.screenshot({ path: 'screenshots/gitlogin.png' })
   })
 
-  it('checkElementExisting', async () => {  
+  it.only('checkElementExisting', async () => {  
     await page.goto('https://github.com/stepanchaparyan')
     const element = await page.$('#js-pjax-container > div > div.signup-prompt-bg.rounded-1 > div > div > a') !== null
     expect(element).equal(false);
     await page.screenshot({ path: 'screenshots/gitlogin2.png' })
-  })   
+  })
+  
+  it.only('checkElementWithDom', async () => {  
+    await page.goto('https://github.com/github')
+    expect(document.querySelector('#js-pjax-container > div > div > div.signup-prompt-bg.rounded-1 > div > div > a')).to.have.text('Sign up')
+  })  
 
   it('checkList', async () => {  
     await page.goto('https://github.com/stepanchaparyan')
