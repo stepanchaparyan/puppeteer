@@ -13,9 +13,12 @@
   "dependencies": {
     "chai": "^4.1.2",
     "chai-dom": "^1.8.1",
+    "chai-jquery": "^2.1.0",
     "chai-string": "^1.5.0",
     "connect": "^3.6.5",
     "http-server": "^0.10.0",
+    "jquery": "^3.3.1",
+    "jsdom": "^13.0.0",
     "lodash": "^4.17.11",
     "mocha": "^4.1.0",
     "pixelmatch": "^4.0.2",

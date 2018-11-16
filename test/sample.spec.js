@@ -1,8 +1,4 @@
 const { expect } = require('chai')
-
-var chai = require('chai')
-chai.use(require('chai-dom'))
-
 const puppeteer = require('puppeteer')
 const fs = require('fs')
 const PNG = require('pngjs').PNG
@@ -204,16 +200,19 @@ describe('loginBeforeAll', async () => {
     await page.screenshot({ path: 'screenshots/gitlogin.png' })
   })
 
-  it.only('checkElementExisting', async () => {  
+  it('checkElementExisting', async () => {  
     await page.goto('https://github.com/stepanchaparyan')
     const element = await page.$('#js-pjax-container > div > div.signup-prompt-bg.rounded-1 > div > div > a') !== null
     expect(element).equal(false);
     await page.screenshot({ path: 'screenshots/gitlogin2.png' })
   })
   
-  it.only('checkElementWithDom', async () => {  
+  it('checkElementWithDom', async () => {  
     await page.goto('https://github.com/github')
-    expect(document.querySelector('#js-pjax-container > div > div > div.signup-prompt-bg.rounded-1 > div > div > a')).to.have.text('Sign up')
+    //expect(document.querySelector('#js-pjax-container > div > div > div.signup-prompt-bg.rounded-1 > div > div > a')).to.have.text('Sign up')
+    expect($('#js-pjax-container > div > div > div.signup-prompt-bg.rounded-1 > div > div > a')).to.have.text('Sign up');
+    //const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+    //console.log(dom.window.document.querySelector("p").textContent);
   })  
 
   it('checkList', async () => {  
@@ -227,8 +226,8 @@ describe('loginBeforeAll', async () => {
   })  
 })
  
-describe('pixelmatch', async () => {
-  it('pixel', async () => {  
+describe.only('pixelmatch', () => {
+  it('pixel', (done) => {  
     const img1 = fs.createReadStream('screenshots/Stepan2.png').pipe(new PNG()).on('parsed', doneReading)
     const img2 = fs.createReadStream('screenshots/Stepan22.png').pipe(new PNG()).on('parsed', doneReading)
     let filesRead = 0;
@@ -240,13 +239,11 @@ describe('pixelmatch', async () => {
         numDiffPixel = pixelmatch(img1.data, img2.data, diff.data, img1.width, img1.height, {threshold: 0.1});
         console.log("this is: " + numDiffPixel)
         diff.pack().pipe(fs.createWriteStream('screenshots/diff.png'));
-        expect(5).equal(10);
+        expect(numDiffPixel).equal(0);
+        done();
     }
-    //expect(numDiffPixel).equal(5);
   })     
 })
-
-
 
 afterEach(async () => {
   await browser.close()
