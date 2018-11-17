@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/sample.spec.js --timeout 150000",
+    "test": "mocha test/sample.spec.js --timeout 15000000",
     "server": "http-server src"
   },
   "keywords": [],
@@ -16,6 +16,7 @@
     "chai-jquery": "^2.1.0",
     "chai-string": "^1.5.0",
     "connect": "^3.6.5",
+    "fs-extra": "^7.0.1",
     "http-server": "^0.10.0",
     "jquery": "^3.3.1",
     "jsdom": "^13.0.0",

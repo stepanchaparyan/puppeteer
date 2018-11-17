@@ -1,6 +1,6 @@
 const { expect } = require('chai')
 const puppeteer = require('puppeteer')
-const fs = require('fs')
+const fs = require('fs-extra')
 const PNG = require('pngjs').PNG
 const pixelmatch = require('pixelmatch')
 const CREDS = require('../creds');
@@ -16,7 +16,7 @@ let showSlowMotion = {headless: false, slowMo: 1000}
 let ignoreHTTPSErrors = {ignoreHTTPSErrors: true, headless: false, timeout: 0 }
 
 beforeEach(async () => {
-  browser = await puppeteer.launch()
+  browser = await puppeteer.launch(showUI)
   page = await browser.newPage()
   await page.setViewport(viewport)
 })
@@ -117,10 +117,56 @@ describe('separateCheckers', async () => {
       expect(name).equal('GEOGRAPHY');
   })
 
+  it('expertsShopify.com', async () => {  
+    await page.goto('http://experts.shopify.com')
+    await page.waitForSelector('.section')
+
+    const sections = await page.$$('.section')
+    await fs.writeFile('out.csv', 'section,name\n')
+
+    for (let i = 0; i < sections.length; i++) {
+      await page.goto('http://experts.shopify.com')
+      await page.waitForSelector('.section')
+
+      const sections = await page.$$('.section')
+      const section = sections[i]
+      const button =  await section.$('a.marketing-button')
+      const buttonName = await page.evaluate(button => button.innerText, button)
+      //console.log('\n')
+      //console.log('Experts: ', buttonName)
+      await page.waitFor(1000)
+      button.click() 
+
+      await page.waitForSelector('#ExpertsResults')
+      const results = await page.$$('#ExpertsResults > li')      
+      for (let i = 0; i < results.length; i++) {
+        const result = results[i]
+        await page.waitFor(1000)
+        const title = await result.$('a.link-color')
+        await page.waitFor(1000)
+        const titleName = await page.evaluate(title => title.innerText, title)
+        //console.log('Specialists: ', titleName)
+        await page.waitFor(1000)
+        await fs.appendFile('out.csv', `"${buttonName}","${titleName}"\n`)
+      }  
+    }
+})
+  
   it('checkElementExisting', async () => {  
     await page.goto('http://localhost/quizGameES6/#')
     const element = await page.$('.navbar-brand') !== null
     expect(element).equal(true);
+  })   
+
+  it('screenshotModalOnly', async () => {  
+    await page.goto('http://twitter.com/ebidel')
+    await page.$eval('.tweet', tweet => {
+      tweet.click()})
+    await page.waitFor(1000)
+    await page.waitForSelector('.permalink-tweet', {visible: true})
+    const overlay = await page.$('.permalink-tweet')  
+    await page.waitFor(1000)
+    await overlay.screenshot({path: 'screenshots/tweet.png'})
   })   
 
   it('checkContinentsList', async () => {  
@@ -150,35 +196,46 @@ describe('checks', async () => {
     await page.screenshot({ path: 'screenshots/wtlogin.png' })
   })
 
-  it('GitLogin', async () => {  
+  it.only('GitLogin', async () => {  
     await page.goto('https://github.com/github')
     await page.waitForSelector('body > div.position-relative.js-header-wrapper > header > div > div.HeaderMenu.d-flex.flex-justify-between.flex-auto > div > span > div > a:nth-child(1)')
     await page.click('body > div.position-relative.js-header-wrapper > header > div > div.HeaderMenu.d-flex.flex-justify-between.flex-auto > div > span > div > a:nth-child(1)')
-    await page.waitFor(4000)
+    await page.waitFor(1000)
     await page.type('#login_field', CREDS.usernameS)
     await page.type('#password', CREDS.passwordS)
     await page.click('#login > form > div.auth-form-body.mt-3 > input.btn.btn-primary.btn-block')
-    await page.waitFor(5000)
-    await page.screenshot({ path: 'screenshots/gitlogin.png' })
+    await page.waitFor(1000)
+    //await page.screenshot({ path: 'screenshots/gitlogin.png' })
+    await page.pdf({ path: 'pdf/logingithub.pdf', format: 'A4'})
   })
 
-  it('counts of Elements', async () => {  
-    await page.goto('https://www.chaijs.com/guide/')
-    const bodyCounts = await page.$$eval('body', body => body.length);
-    expect(bodyCounts).equal(1)
+  it('Alert', async () => {  
+    await page.goto('https://www.google.com/')
+    page.on('dialog', async dialog => {
+      await page.waitFor(2000)
+      await dialog.dismiss()
+    })
+    await page.evaluate(() => alert('This message is inside an alert box'))
+  })
 
-    await page.goto('https://www.chaijs.com/guide/')
-    const ulCounts = await page.$$eval('ul', ul => ul.length);
-    expect(ulCounts).equal(7)
+  context("contextTest", async() => {
+    it('counts of Elements', async () => {  
+      await page.goto('https://www.chaijs.com/guide/')
+      const bodyCounts = await page.$$eval('body', body => body.length);
+      expect(bodyCounts).equal(1)
 
-    await page.goto('https://www.chaijs.com/guide/')
-    const elhref = await page.$eval('#assertion-styles > a', el => el.href);
-    expect(elhref).equal('https://www.chaijs.com/guide/styles/')
+      await page.goto('https://www.chaijs.com/guide/')
+      const ulCounts = await page.$$eval('ul', ul => ul.length);
+      expect(ulCounts).equal(7)
 
-    await page.goto('https://www.chaijs.com/guide/')
-    const elValue = await page.$eval('#welcome-to-chai', el => el.innerText);
-    expect(elValue).equal('Welcome to Chai')
-    
+      await page.goto('https://www.chaijs.com/guide/')
+      const elhref = await page.$eval('#assertion-styles > a', el => el.href);
+      expect(elhref).equal('https://www.chaijs.com/guide/styles/')
+
+      await page.goto('https://www.chaijs.com/guide/')
+      const elValue = await page.$eval('#welcome-to-chai', el => el.innerText);
+      expect(elValue).equal('Welcome to Chai')
+    })  
   })
   
 })
@@ -191,29 +248,22 @@ describe('loginBeforeAll', async () => {
     await page.type('#login_field', CREDS.usernameS)
     await page.type('#password', CREDS.passwordS)
     await page.click('#login > form > div.auth-form-body.mt-3 > input.btn.btn-primary.btn-block')
-    await page.waitFor(2000)
+    await page.waitFor(1000)
   })
 
   it('GitLogin', async () => {  
     await page.goto('https://github.com/stepanchaparyan')
-    await page.waitFor(9000)
+    await page.waitFor(2000)
     await page.screenshot({ path: 'screenshots/gitlogin.png' })
   })
 
   it('checkElementExisting', async () => {  
     await page.goto('https://github.com/stepanchaparyan')
-    const element = await page.$('#js-pjax-container > div > div.signup-prompt-bg.rounded-1 > div > div > a') !== null
-    expect(element).equal(false);
+    const element = await page.$('.p-name') !== null
+    expect(element).equal(true);
     await page.screenshot({ path: 'screenshots/gitlogin2.png' })
   })
   
-  it('checkElementWithDom', async () => {  
-    await page.goto('https://github.com/github')
-    //expect(document.querySelector('#js-pjax-container > div > div > div.signup-prompt-bg.rounded-1 > div > div > a')).to.have.text('Sign up')
-    expect($('#js-pjax-container > div > div > div.signup-prompt-bg.rounded-1 > div > div > a')).to.have.text('Sign up');
-    //const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
-    //console.log(dom.window.document.querySelector("p").textContent);
-  })  
 
   it('checkList', async () => {  
     await page.goto('https://github.com/stepanchaparyan')
@@ -226,21 +276,35 @@ describe('loginBeforeAll', async () => {
   })  
 })
  
-describe.only('pixelmatch', () => {
+describe('pixelmatch', () => {
+  it('chaijs1', async () => {  
+    await page.goto('https://www.chaijs.com/')
+    await page.waitFor(2000)
+    await page.screenshot({ path: 'screenshots/chaijs1.png' })
+  })
+
+  it('chaijs2', async () => {  
+    await page.goto('https://www.chaijs.com/')
+    await page.waitFor(2000)
+    await page.click('#node > h2 > small > a:nth-child(1)')
+    await page.waitFor(2000)
+    await page.screenshot({ path: 'screenshots/chaijs2.png' })
+  })  
+
   it('pixel', (done) => {  
-    const img1 = fs.createReadStream('screenshots/Stepan2.png').pipe(new PNG()).on('parsed', doneReading)
-    const img2 = fs.createReadStream('screenshots/Stepan22.png').pipe(new PNG()).on('parsed', doneReading)
-    let filesRead = 0;
+    const img1 = fs.createReadStream('screenshots/chaijs1.png').pipe(new PNG()).on('parsed', doneReading)
+    const img2 = fs.createReadStream('screenshots/chaijs2.png').pipe(new PNG()).on('parsed', doneReading)
+    let filesRead = 0
     let numDiffPixel
 
     function doneReading() {
-        if (++filesRead < 2) return;
-        let diff = new PNG({width: img1.width, height: img1.height});
-        numDiffPixel = pixelmatch(img1.data, img2.data, diff.data, img1.width, img1.height, {threshold: 0.1});
+        if (++filesRead < 2) return
+        let diff = new PNG({width: img1.width, height: img1.height})
+        numDiffPixel = pixelmatch(img1.data, img2.data, diff.data, img1.width, img1.height, {threshold: 0.1})
         console.log("this is: " + numDiffPixel)
-        diff.pack().pipe(fs.createWriteStream('screenshots/diff.png'));
-        expect(numDiffPixel).equal(0);
-        done();
+        diff.pack().pipe(fs.createWriteStream('screenshots/diff.png'))
+        expect(numDiffPixel).equal(0)
+        done()
     }
   })     
 })
