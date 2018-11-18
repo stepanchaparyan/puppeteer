@@ -16,7 +16,7 @@ let showSlowMotion = {headless: false, slowMo: 1000}
 let ignoreHTTPSErrors = {ignoreHTTPSErrors: true, headless: false, timeout: 0 }
 
 beforeEach(async () => {
-  browser = await puppeteer.launch(showUI)
+  browser = await puppeteer.launch()
   page = await browser.newPage()
   await page.setViewport(viewport)
 })
@@ -196,7 +196,7 @@ describe('checks', async () => {
     await page.screenshot({ path: 'screenshots/wtlogin.png' })
   })
 
-  it.only('GitLogin', async () => {  
+  it('GitLogin', async () => {  
     await page.goto('https://github.com/github')
     await page.waitForSelector('body > div.position-relative.js-header-wrapper > header > div > div.HeaderMenu.d-flex.flex-justify-between.flex-auto > div > span > div > a:nth-child(1)')
     await page.click('body > div.position-relative.js-header-wrapper > header > div > div.HeaderMenu.d-flex.flex-justify-between.flex-auto > div > span > div > a:nth-child(1)')
@@ -205,8 +205,13 @@ describe('checks', async () => {
     await page.type('#password', CREDS.passwordS)
     await page.click('#login > form > div.auth-form-body.mt-3 > input.btn.btn-primary.btn-block')
     await page.waitFor(1000)
-    //await page.screenshot({ path: 'screenshots/gitlogin.png' })
-    await page.pdf({ path: 'pdf/logingithub.pdf', format: 'A4'})
+    await page.screenshot({ path: 'screenshots/gitlogin.png' })
+  })
+
+  it.only('PDFtestOnlyHeadless', async () => {  
+    await page.goto('https://github.com/github')
+    await page.waitFor(1000)
+    await page.pdf({ path: 'pdf/pdfTest.pdf', format: 'A4'})
   })
 
   it('Alert', async () => {  
