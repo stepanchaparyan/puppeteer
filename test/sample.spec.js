@@ -5,18 +5,14 @@ const PNG = require('pngjs').PNG
 const pixelmatch = require('pixelmatch')
 const CREDS = require('../creds');
 
-
 let browser, page
-const viewport = { 
-    width: 1920, 
-    height: 1080 
-}
-let showUI = {headless: false}
-let showSlowMotion = {headless: false, slowMo: 1000}
-let ignoreHTTPSErrors = {ignoreHTTPSErrors: true, headless: false, timeout: 0 }
+const viewport = { width: 1920, height: 1080 }
+const showUI = {headless: false}
+const showSlowMotion = {headless: false, slowMo: 300}
+const ignoreHTTPSErrors = {ignoreHTTPSErrors: true, headless: false, timeout: 0 }
 
 beforeEach(async () => {
-  browser = await puppeteer.launch()
+  browser = await puppeteer.launch(showUI)
   page = await browser.newPage()
   await page.setViewport(viewport)
 })
@@ -109,7 +105,7 @@ describe('ES6', async () => {
   })     
 })
 
-describe('separateCheckers', async () => {
+describe('testCases1', async () => {
   it('getElementInnerText', async () => {  
       await page.goto('http://localhost/quizGameES6/#')
       await page.waitForSelector('.navbar-brand')
@@ -117,7 +113,7 @@ describe('separateCheckers', async () => {
       expect(name).equal('GEOGRAPHY');
   })
 
-  it('expertsShopify.com', async () => {  
+  it('getDataListAndSaveToCSV_expertsShopify.com', async () => {  
     await page.goto('http://experts.shopify.com')
     await page.waitForSelector('.section')
 
@@ -167,7 +163,15 @@ describe('separateCheckers', async () => {
     const overlay = await page.$('.permalink-tweet')  
     await page.waitFor(1000)
     await overlay.screenshot({path: 'screenshots/tweet.png'})
-  })   
+  })  
+  
+  it('screenshotClipped', async () => {  
+    const options = {
+      path: 'screenshots/clipped.png',
+      clip: { x: 450, y: 5, width: 300, height: 70 } }
+    await page.goto('https://www.chaijs.com/')
+    await page.screenshot(options)
+  })  
 
   it('checkContinentsList', async () => {  
     await page.goto('http://localhost/quizGameAngularJS/#!/')
@@ -182,21 +186,18 @@ describe('separateCheckers', async () => {
   })  
 })
 
-describe('checks', async () => {
-  it('login', async () => {  
-    //await page.goto('https://app.webtrends-optimize.com/optimize/manage/assets')
-    await page.goto('https://instwrk01.webtrends.corp:778/optimize/')
+describe('testCases2', async () => {
+  it('loginWT', async () => {  
+    await page.goto('https://app.webtrends-optimize.com/optimize/manage/assets')
     await page.waitForSelector('#emailInput')
-    await page.type('#emailInput', CREDS.usernameL)
-    await page.type('#passwordInput', CREDS.passwordL)
+    await page.type('#emailInput', CREDS.usernameA)
+    await page.type('#passwordInput', CREDS.passwordA)
     await page.click('.submit-button')
-    await page.waitFor(5000)
-    await page.click('body > main > div > div > div > div:nth-child(2) > div > div.account-groups > div:nth-child(2) > div > a')
-    await page.waitFor(90000)
+    await page.waitFor(15000)
     await page.screenshot({ path: 'screenshots/wtlogin.png' })
   })
 
-  it('GitLogin', async () => {  
+  it('loginGit', async () => {  
     await page.goto('https://github.com/github')
     await page.waitForSelector('body > div.position-relative.js-header-wrapper > header > div > div.HeaderMenu.d-flex.flex-justify-between.flex-auto > div > span > div > a:nth-child(1)')
     await page.click('body > div.position-relative.js-header-wrapper > header > div > div.HeaderMenu.d-flex.flex-justify-between.flex-auto > div > span > div > a:nth-child(1)')
@@ -208,7 +209,7 @@ describe('checks', async () => {
     await page.screenshot({ path: 'screenshots/gitlogin.png' })
   })
 
-  it.only('PDFtestOnlyHeadless', async () => {  
+  it('PDFtestOnlyHeadless', async () => {  
     await page.goto('https://github.com/github')
     await page.waitFor(1000)
     await page.pdf({ path: 'pdf/pdfTest.pdf', format: 'A4'})
@@ -221,6 +222,12 @@ describe('checks', async () => {
       await dialog.dismiss()
     })
     await page.evaluate(() => alert('This message is inside an alert box'))
+  })
+
+  it('Hover', async () => {  
+    await page.goto('https://soundcloud.com/')
+    await page.hover('.playableTile__artwork')
+    await page.screenshot({ path: 'screenshots/hover.png' })
   })
 
   context("contextTest", async() => {
@@ -256,7 +263,7 @@ describe('loginBeforeAll', async () => {
     await page.waitFor(1000)
   })
 
-  it('GitLogin', async () => {  
+  it('loginGit', async () => {  
     await page.goto('https://github.com/stepanchaparyan')
     await page.waitFor(2000)
     await page.screenshot({ path: 'screenshots/gitlogin.png' })
