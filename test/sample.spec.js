@@ -1,28 +1,33 @@
-const { expect } = require('chai')
-const puppeteer = require('puppeteer')
-const fs = require('fs-extra')
-const PNG = require('pngjs').PNG
-const pixelmatch = require('pixelmatch')
-const CREDS = require('../creds');
+import { assert } from 'chai'
+import { expect } from 'chai'
+import puppeteer from 'puppeteer'
+import fs from 'fs-extra'
+import { PNG } from 'pngjs'
+import pixelmatch from "pixelmatch"
+import CREDS from "../creds"
+import GoogleSearchPage from "../pageobjects/googlesearchpage"
 
-let browser, page
+let browser, page, googlesearchpage
 const viewport = { width: 1920, height: 1080 }
 const showUI = {headless: false}
 const showSlowMotion = {headless: false, slowMo: 300}
 
 beforeEach(async () => {
-  browser = await puppeteer.launch()
+  browser = await puppeteer.launch(showUI)
   page = await browser.newPage()
   await page.setViewport(viewport)
 })
 
 describe('browser version', async () => {
-    // it('HeadlessChromeVersion', async () => {
-    //   expect(`HeadlessChrome/64.0.3264.0`).to.equal(await browser.version())
-    // })
     it('ChromeVersion', async () => {
-      expect(`Chrome/64.0.3264.0`).to.equal(await browser.version())
+      expect(await browser.version()).to.include(`Chrome/64.0.3264.0`);
     })
+    it('DOM test with "Google title', async () => {
+      googlesearchpage = new GoogleSearchPage(page)
+      await googlesearchpage.open()
+      const title = await googlesearchpage.getTitle()
+      assert.equal(title, 'Google')
+    });
 })
 
 describe('start', async () => {
