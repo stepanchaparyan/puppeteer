@@ -6,6 +6,8 @@ import { PNG } from 'pngjs'
 import pixelmatch from "pixelmatch"
 import CREDS from "../creds"
 import GoogleSearchPage from "../pageobjects/googlesearchpage"
+import Menu from '../pageobjects/menu'
+
 
 let browser, page, googlesearchpage
 const viewport = { width: 1920, height: 1080 }
@@ -129,6 +131,21 @@ describe('list.am', async () => {
   }) 
 
 }) 
+
+describe('menu', () => {
+  it('checkbox 2 should be enabled', () => {
+      Menu.open()
+      //assert.equal(CheckboxPage.firstCheckbox.isSelected(), false)
+      //assert.equal(CheckboxPage.lastCheckbox.isSelected(), true)
+  })
+
+  it('checkbox 1 should be enabled after clicking on it', () => {
+      //CheckboxPage.open()
+      //assert.equal(CheckboxPage.firstCheckbox.isSelected(), false)
+      //CheckboxPage.firstCheckbox.click()
+      //assert.equal(CheckboxPage.firstCheckbox.isSelected(), true)
+  })
+})
 
 afterEach(async () => {
   await browser.close()
