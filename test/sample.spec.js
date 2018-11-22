@@ -6,10 +6,10 @@ import { PNG } from 'pngjs'
 import pixelmatch from "pixelmatch"
 import CREDS from "../creds"
 import GoogleSearchPage from "../pageobjects/googlesearchpage"
-import Menu from '../pageobjects/menu'
+import MenuBar from '../pageobjects/menuBar'
 
 
-let browser, page, googlesearchpage
+let browser, page, googlesearchpage, menuBar
 const viewport = { width: 1920, height: 1080 }
 const showUI = {headless: false}
 const showSlowMotion = {headless: false, slowMo: 300}
@@ -133,18 +133,17 @@ describe('list.am', async () => {
 }) 
 
 describe('menu', () => {
-  it('checkbox 2 should be enabled', () => {
-      Menu.open()
-      //assert.equal(CheckboxPage.firstCheckbox.isSelected(), false)
-      //assert.equal(CheckboxPage.lastCheckbox.isSelected(), true)
+  it('checkbox 2 should be enabled', async () => {
+    menuBar = new MenuBar(page)
+    await menuBar.open()
+    const title = await menuBar.getTitle()
+    console.log("title: " + title)
+    const ma = await menuBar.myAccount()
+    await ma.click()
+    await page.waitFor(1000)
+    await page.screenshot({ path: 'screenshots/ma.png' })   
   })
 
-  it('checkbox 1 should be enabled after clicking on it', () => {
-      //CheckboxPage.open()
-      //assert.equal(CheckboxPage.firstCheckbox.isSelected(), false)
-      //CheckboxPage.firstCheckbox.click()
-      //assert.equal(CheckboxPage.firstCheckbox.isSelected(), true)
-  })
 })
 
 afterEach(async () => {

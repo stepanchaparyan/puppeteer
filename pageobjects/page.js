@@ -1,5 +1,11 @@
 export default class Page {
-    open (path) {
-        browser.url(path)
-    }
+
+    // constructor(page) {
+    //    this.page = page;
+    // }
+
+    // async open () {
+    //     //browser.url(path)
+    //     return this.page.goto()
+    // }
 }
