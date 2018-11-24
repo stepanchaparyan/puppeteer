@@ -1,11 +1,9 @@
-import { assert } from 'chai'
 import { expect } from 'chai'
 import puppeteer from 'puppeteer'
 import fs from 'fs-extra'
 import { PNG } from 'pngjs'
 import pixelmatch from "pixelmatch"
 import CREDS from "../creds"
-import GoogleSearchPage from "../pageobjects/googlesearchpage"
 import MenuBar from '../pageobjects/menuBar'
 
 let browser, page, googlesearchpage, menuBar
@@ -91,15 +89,22 @@ describe('list.am', async () => {
 }) 
 
 describe.only('list.am with POM', () => {
-  it('menyBar', async () => {
+  beforeEach(async () => {
     menuBar = new MenuBar(page)
     await menuBar.open()
+  })
+  it('old', async () => {
     const title = await menuBar.getTitle()
     console.log("title: " + title)
+    // TODO expect($('#ma')).to.exist;
+    // TODO expect(menuBar.myAccount).to.exist;
     const ma = await menuBar.myAccount()
     await ma.click()
     await page.waitFor(1000)
-    await page.screenshot({ path: 'screenshots/ma.png' })   
+    await page.screenshot({ path: 'screenshots/ma1.png' })   
+  })
+  it('checkMenuBarElements', async () => {
+    expect(await menuBar.myAccountExist()).to.be.true; 
   })
 })
 

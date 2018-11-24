@@ -1,15 +1,11 @@
-import { assert } from 'chai'
 import { expect } from 'chai'
 import puppeteer from 'puppeteer'
 import fs from 'fs-extra'
 import { PNG } from 'pngjs'
 import pixelmatch from "pixelmatch"
 import CREDS from "../creds"
-import GoogleSearchPage from "../pageobjects/googlesearchpage"
-import MenuBar from '../pageobjects/menuBar'
 
-
-let browser, page, googlesearchpage, menuBar
+let browser, page
 const viewport = { width: 1920, height: 1080 }
 const showUI = {headless: false}
 const showSlowMotion = {headless: false, slowMo: 300}
@@ -24,12 +20,6 @@ describe.only('browser version', async () => {
     it('ChromeVersion', async () => {
       expect(await browser.version()).to.include(`Chrome/64.0.3264.0`);
     })
-    it('DOM test with "Google title', async () => {
-      googlesearchpage = new GoogleSearchPage(page)
-      await googlesearchpage.open()
-      const title = await googlesearchpage.getTitle()
-      assert.equal(title, 'Google')
-    });
 })
 
 describe.skip('start', async () => {
