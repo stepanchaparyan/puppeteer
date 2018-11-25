@@ -104,16 +104,22 @@ describe('list.am nabvar Elements', () => {
     await page.waitFor(1000)
     await page.screenshot({ path: 'screenshots/ma1.png' })   
   })
-  it('checkMyAccountExisting', async () => {
+  it('logoExist', async () => {
+    expect(await menuBar.logoExist()).to.be.true; 
+  })
+  it('searchBoxExist', async () => {
+    expect(await menuBar.searchBoxExist()).to.be.true; 
+  })
+  it('myAccountExist', async () => {
     expect(await menuBar.myAccountExist()).to.be.true; 
   })
-  it('checkStarExisting', async () => {
+  it('starExist', async () => {
     expect(await menuBar.starExist()).to.be.true; 
   })
-  it('checkPostsAddExisting', async () => {
+  it('postsAddExist', async () => {
     expect(await menuBar.postAddExist()).to.be.true; 
   })
-  it('checklanguageBarExisting', async () => {
+  it('languageBarExist', async () => {
     expect(await menuBar.languageBarExist()).to.be.true; 
   })
 })
@@ -144,17 +150,12 @@ describe.only('list.am language bar', () => {
     expect(await menuBar.changePageLanguageIntoRussian()).equal('Личный кабинет')
   })
 
-  describe("languageBar UI test by pixelMatch", async() => {
-    beforeEach(async () => {  
-      await menuBar.makeScreenshotForLanguageMenu()
-    }) 
-    it('languageMenu UI pixelMatch', async () => {  
-      await menuBar.checkLanguageMenuUI()
-    })
+  it('languageMenu UI test by pixelMatch', async () => {  
+    await menuBar.makeScreenshotForLanguageMenu()
+    await menuBar.checkLanguageMenuUI()
   })
 
 })
-
 
 afterEach(async () => {
   await browser.close()

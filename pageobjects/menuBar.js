@@ -27,7 +27,11 @@ export default class MenuBar {
         await this.page.click('#loginaction__form_action0')
         await this.page.waitFor(2000)
     }
-
+    async logoExist () {
+        return await this.page.$('#l') !== null
+    }    async searchBoxExist () {
+        return await this.page.$('#idSearchBox') !== null
+    }
     async myAccountExist () {
         return await this.page.$('#ma') !== null
     }
@@ -73,7 +77,7 @@ export default class MenuBar {
 
     async makeScreenshotForLanguageMenu() {
         const languageMenu = await this.page.$('#lmenu')  
-        await languageMenu.screenshot({path: 'screenshots/languageMenu2.png'})
+        await languageMenu.screenshot({path: 'screenshots/languageMenu1.png'})
     }
     async checkLanguageMenuUI() {
         const img1 = fs.createReadStream('screenshots/languageMenu1.png').pipe(new PNG()).on('parsed', doneReading)
