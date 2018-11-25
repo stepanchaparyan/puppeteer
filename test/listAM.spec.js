@@ -69,10 +69,10 @@ describe('list.am', async () => {
     await page.goto('https://www.list.am')
     await page.click('#sa')
     await page.waitFor(2000)
-    await page.screenshot({ path: 'screenshots/listPrice2.png' })
+    await page.screenshot({ path: 'screenshots/listPrice1.png' })
 
     const img1 = fs.createReadStream('screenshots/listPrice1.png').pipe(new PNG()).on('parsed', doneReading)
-    const img2 = fs.createReadStream('screenshots/listPrice2.png').pipe(new PNG()).on('parsed', doneReading)
+    const img2 = fs.createReadStream('screenshots/languageBar.png').pipe(new PNG()).on('parsed', doneReading)
     let filesRead = 0
     let numDiffPixel
 
@@ -88,12 +88,13 @@ describe('list.am', async () => {
   }) 
 }) 
 
-describe.only('list.am with POM', () => {
+describe('list.am nabvar Elements', () => {
   beforeEach(async () => {
     menuBar = new MenuBar(page)
     await menuBar.open()
+    await menuBar.logIn()
   })
-  it('old', async () => {
+  it.skip('test', async () => {
     const title = await menuBar.getTitle()
     console.log("title: " + title)
     // TODO expect($('#ma')).to.exist;
@@ -103,10 +104,57 @@ describe.only('list.am with POM', () => {
     await page.waitFor(1000)
     await page.screenshot({ path: 'screenshots/ma1.png' })   
   })
-  it('checkMenuBarElements', async () => {
+  it('checkMyAccountExisting', async () => {
     expect(await menuBar.myAccountExist()).to.be.true; 
   })
+  it('checkStarExisting', async () => {
+    expect(await menuBar.starExist()).to.be.true; 
+  })
+  it('checkPostsAddExisting', async () => {
+    expect(await menuBar.postAddExist()).to.be.true; 
+  })
+  it('checklanguageBarExisting', async () => {
+    expect(await menuBar.languageBarExist()).to.be.true; 
+  })
 })
+
+describe.only('list.am language bar', () => {
+  beforeEach(async () => {
+    menuBar = new MenuBar(page)
+    await menuBar.open()
+    await menuBar.clickOnLanguageBar()
+  })
+  it('languageBarMenuExist', async () => {
+    expect(await menuBar.languageBarMenuExist()).to.be.true; 
+  })
+  it('languageBarTextрусский', async () => {
+    expect(await menuBar.languageBarTextRussian()).equal('русский')
+  })
+  it('languageBarTextenglish', async () => {
+    expect(await menuBar.languageBarTextEnglish()).equal('english')
+  })
+  it('languageBarTextհայերեն', async () => {
+    expect(await menuBar.languageBarTextArmenian()).equal('հայերեն')
+  })
+
+  it('changeLanguageintoEnglish', async () => {
+    expect(await menuBar.changePageLanguageIntoEnglish()).equal('My Account')
+  })
+  it('changeLanguageintoRussian', async () => {
+    expect(await menuBar.changePageLanguageIntoRussian()).equal('Личный кабинет')
+  })
+
+  describe("languageBar UI test by pixelMatch", async() => {
+    beforeEach(async () => {  
+      await menuBar.makeScreenshotForLanguageMenu()
+    }) 
+    it('languageMenu UI pixelMatch', async () => {  
+      await menuBar.checkLanguageMenuUI()
+    })
+  })
+
+})
+
 
 afterEach(async () => {
   await browser.close()

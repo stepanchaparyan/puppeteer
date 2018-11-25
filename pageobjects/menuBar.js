@@ -1,3 +1,9 @@
+import CREDS from "../creds"
+import { expect } from 'chai'
+import fs from 'fs-extra'
+import { PNG } from 'pngjs'
+import pixelmatch from "pixelmatch"
+
 export default class MenuBar {
 
     constructor(page) {
@@ -12,7 +18,77 @@ export default class MenuBar {
         return await this.page.goto('https://www.list.am')
     }
 
+    async logIn () {
+        //await this.page.waitForSelector('#ma')
+        await this.page.click('#ma')
+        //await this.page.waitForSelector('#_idyour_email')
+        await this.page.type('#_idyour_email', CREDS.usernameS)
+        await this.page.type('#_idpassword', CREDS.passwordS)
+        await this.page.click('#loginaction__form_action0')
+        await this.page.waitFor(2000)
+    }
+
     async myAccountExist () {
         return await this.page.$('#ma') !== null
     }
+    async starExist () {
+        return await this.page.$('#sa') !== null
+    }
+    async postAddExist () {
+        return await this.page.$('#ap') !== null
+    }
+    async languageBarExist () {
+        return await this.page.$('#lbar') !== null
+    }
+
+    async clickOnLanguageBar () {
+        await this.page.click('#lbar')
+        await this.page.waitFor(1000)
+    }
+    async languageBarMenuExist () {
+        return await this.page.$('#lmenu') !== null
+    }
+    async languageBarTextRussian() {
+        return await this.page.$eval('#lmenu > a:nth-child(1)', element => element.innerText)
+    }
+    async languageBarTextEnglish() {
+        return await this.page.$eval('#lmenu > a:nth-child(2)', element => element.innerText)
+    }
+    async languageBarTextArmenian() {
+        await this.page.click('#lmenu > a:nth-child(2)')
+        await this.page.waitFor(1000)
+        await this.page.click('#lbar')
+        return await this.page.$eval('#lmenu > a:nth-child(1)', element => element.innerText)
+    }
+    async changePageLanguageIntoEnglish() {
+        await this.page.click('#lmenu > a:nth-child(2)')
+        await this.page.waitFor(1000)
+        return await this.page.$eval('#ma', element => element.innerText)
+    }
+    async changePageLanguageIntoRussian() {
+        await this.page.click('#lmenu > a:nth-child(1)')
+        await this.page.waitFor(1000)
+        return await this.page.$eval('#ma', element => element.innerText)
+    }
+
+    async makeScreenshotForLanguageMenu() {
+        const languageMenu = await this.page.$('#lmenu')  
+        await languageMenu.screenshot({path: 'screenshots/languageMenu2.png'})
+    }
+    async checkLanguageMenuUI() {
+        const img1 = fs.createReadStream('screenshots/languageMenu1.png').pipe(new PNG()).on('parsed', doneReading)
+        const img2 = fs.createReadStream('screenshots/languageMenu2.png').pipe(new PNG()).on('parsed', doneReading)
+        let filesRead = 0
+        let numDiffPixel
+        
+        function doneReading() {
+            if (++filesRead < 2) return
+            let diff = new PNG({width: img1.width, height: img1.height})
+            numDiffPixel = pixelmatch(img1.data, img2.data, diff.data, img1.width, img1.height, {threshold: 0.1})
+            diff.pack().pipe(fs.createWriteStream('screenshots/diff.png'))
+            expect(numDiffPixel).equal(0)
+        }
+    }
+
+    
 }
