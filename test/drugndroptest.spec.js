@@ -43,9 +43,10 @@ import CREDS from "../creds"
   await mouse.up()
   await page.screenshot({path: 'screenshots/3.png'})
 
+
+  // WORKING EXAMPLE WITH GOOGLE MAP
   // await page.setViewport({width: 1200, height: 800, deviceScaleFactor: 1});
   // await page.goto('https://www.google.de/maps/@52.4889552,13.4707445,1555m/data=!3m1!1e3')
-
   // const mouse = page.mouse
   // await mouse.move(500, 500)
   // await mouse.down()
