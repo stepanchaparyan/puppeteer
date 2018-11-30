@@ -38,14 +38,14 @@ describe('elements exist', async () => {
   it('allSegmentsFilterExist', async () => {
     expect(await segmentBuilder.allSegmentsFilterExist()).to.be.true; 
   })
-  it('inUseFilterExist', async () => {
+  it.skip('inUseFilterExist', async () => {
     expect(await segmentBuilder.inUseFilterExist()).to.be.true; 
   })
-  it('notInUseFilterExist', async () => {
+  it.skip('notInUseFilterExist', async () => {
     expect(await segmentBuilder.notInUseFilterExist()).to.be.true; 
   })
 
-  context("tableHeads", async() => {
+  context.skip("tableHeads", async() => {
     it('tableHeadSegmentsExist', async () => {
       expect(await segmentBuilder.tableHeadSegmentsExist()).to.be.true; 
     })
@@ -63,6 +63,34 @@ describe('elements exist', async () => {
     })
   })
 
+  context("tableRows", async() => {
+    it('tableRowSegmentsExist', async () => {
+      expect(await segmentBuilder.tableRowSegmentsExist()).to.be.true; 
+    })
+    it('tableRowIDExist', async () => {
+      expect(await segmentBuilder.tableRowIDExist()).to.be.true; 
+    })
+    it('tableRowUseCountExist', async () => {
+      expect(await segmentBuilder.tableRowUseCountExist()).to.be.true; 
+    })
+    it('tableRowModifiedExist', async () => {
+      expect(await segmentBuilder.tableRowModifiedExist()).to.be.true; 
+    })
+    it('tableRowCreatedExist', async () => {
+      expect(await segmentBuilder.tableRowCreatedExist()).to.be.true; 
+    })
+    context.only("tableRowIcons", async() => {
+      it('tableRowUpdateIconExist', async () => {
+        expect(await segmentBuilder.tableRowUpdateIconExist()).to.be.true; 
+      })
+      it('tableRowDeleteIconExist', async () => {
+        expect(await segmentBuilder.tableRowDeleteIconExist()).to.be.true; 
+      })
+      it.only('tableRowHiddenIconExist', async () => {
+        expect(await segmentBuilder.tableRowHiddenIconExist()).to.be.true; 
+      })
+    })
+  })
 
   // it('searchFieldExist', async () => {
   //   expect(await segmentBuilder.searchFieldExist()).to.be.true; 
