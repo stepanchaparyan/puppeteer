@@ -30,18 +30,48 @@ export default class SegmentBuilder {
     async titleExist () {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div:nth-child(1) > div > div > span.section-header__title > h1') !== null
     }
-    // async Exist () {
-    //     return await this.page.$('') !== null
-    // }    
-    // async Exist () {
-    //     return await this.page.$('') !== null
-    // }    
-    // async Exist () {
-    //     return await this.page.$('') !== null
-    // }    
-    // async Exist () {
+    async searchFieldExist () {
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div:nth-child(1) > div > div > span.section-header__toolbar > div > input') !== null
+    }    
+    async addSegmentButtonExist () {
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div:nth-child(1) > div > div > span.section-header__toolbar > button > svg > path') !== null
+    }
+
+    async allSegmentsFilterExist () {
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div > span.segments-filter__tab.segments-filter__tab--active') !== null
+    }    
+    async inUseFilterExist () {
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div > span:nth-child(2)') !== null
+    }
+    async notInUseFilterExist () {
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div > span:nth-child(3)') !== null
+    }
+    
+
+    async tableHeadSegmentsExist () {
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > thead > tr > th:nth-child(1)') !== null
+    }
+    async tableHeadIDExist () {
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > thead > tr > th:nth-child(2)') !== null
+    }
+    async tableHeadUseCountExist () {
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > thead > tr > th:nth-child(3)') !== null
+    }
+    async tableHeadModifiedExist () {
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > thead > tr > th:nth-child(4)') !== null
+    }
+    async tableHeadCreatedExist () {
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > thead > tr > th:nth-child(5)') !== null
+    }
+
+
+    // async tableHeadIDExist () {
     //     return await this.page.$('') !== null
     // }
-
-    
+    // async tableHeadIDExist () {
+    //     return await this.page.$('') !== null
+    // }
+    // async tableHeadIDExist () {
+    //     return await this.page.$('') !== null
+    // }
 }
