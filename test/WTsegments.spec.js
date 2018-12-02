@@ -93,14 +93,14 @@ describe.skip(`first page's elements exist`, async () => {
   })
 })
 
-describe(`addSegment page's elements exist`, async () => {
+describe.skip(`addSegment page's elements exist`, async () => {
   beforeEach(async () => {
     segmentBuilder = new SegmentBuilder(page)
     await segmentBuilder.open()
     await segmentBuilder.logIn()
     await segmentBuilder.goToAddSegmentPage()
   })
-  context.skip(`mainPart's elements`, async() => {
+  context(`mainPart's elements`, async() => {
     it('sectionCreateSegmentExist', async () => {
       expect(await segmentBuilder.sectionCreateSegmentExist()).to.be.true; 
     })
@@ -128,9 +128,7 @@ describe(`addSegment page's elements exist`, async () => {
     it('saveButtonExist', async () => {
       expect(await segmentBuilder.saveButtonExist()).to.be.true; 
     })
-   })
 
-  context("categoryPart elements", async() => { 
     it('categoryMySegmentsExist', async () => {
       expect(await segmentBuilder.categoryMySegmentsExist()).to.be.true; 
     })
@@ -139,17 +137,36 @@ describe(`addSegment page's elements exist`, async () => {
     })
     it('categoryMySegmentsAngleRightExist', async () => {
       expect(await segmentBuilder.categoryMySegmentsAngleRightExist()).to.be.true; 
-    })    
-    it('categoryMySegmentsIcon1Exist', async () => {
-      expect(await segmentBuilder.categoryMySegmentsIcon1Exist()).to.be.true; 
-    })
-    it('categoryMySegmentsIcon2Exist', async () => {
-      expect(await segmentBuilder.categoryMySegmentsIcon2Exist()).to.be.true; 
-    })
-    it('categoryMySegmentsNameExist', async () => {
-      expect(await segmentBuilder.categoryMySegmentsNameExist()).to.be.true; 
-    })
+    })   
   })
+})
+
+describe(`mySegment page's elements exist`, async () => {
+  beforeEach(async () => {
+    segmentBuilder = new SegmentBuilder(page)
+    await segmentBuilder.open()
+    await segmentBuilder.logIn()
+    await segmentBuilder.goToAddSegmentPage()
+    await segmentBuilder.goToMySegmentsList()
+  })
+
+  it('categoryMySegmentsIcon1Exist', async () => {
+    expect(await segmentBuilder.categoryMySegmentsIcon1Exist()).to.be.true; 
+  })
+  it('categoryMySegmentsIcon2Exist', async () => {
+    expect(await segmentBuilder.categoryMySegmentsIcon2Exist()).to.be.true; 
+  })
+  it('categoryMySegmentsNameExist', async () => {
+    expect(await segmentBuilder.categoryMySegmentsNameExist()).to.be.true; 
+  })
+  it.only('mySegmentsCount', async () => {
+    expect(await segmentBuilder.mySegmentsCount()).to.equal(8); 
+
+  })
+
+  // it('dropAttributeHereFieldExist', async () => {
+  //   expect(await segmentBuilder.dropAttributeHereFieldExist()).to.be.true; 
+  // })
 
   // it('dropAttributeHereFieldExist', async () => {
   //   expect(await segmentBuilder.dropAttributeHereFieldExist()).to.be.true; 

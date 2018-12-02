@@ -1,3 +1,4 @@
+import puppeteer from 'puppeteer'
 import CREDS from "../creds"
 import { expect } from 'chai'
 import fs from 'fs-extra'
@@ -91,7 +92,7 @@ export default class SegmentBuilder {
     
     async goToAddSegmentPage() {
         await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(1) > div > div > span.section-header__toolbar > button > svg')
-        await this.page.screenshot({ path: 'screenshots/segmentLogin.png' })
+        await this.page.screenshot({ path: 'screenshots/addSegmentsPage.png' })
     }
     async sectionCreateSegmentExist() {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-header.row > div > div:nth-child(1) > div > span') !== null
@@ -130,6 +131,12 @@ export default class SegmentBuilder {
     async categoryMySegmentsAngleRightExist () {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li.category.category-header > svg') !== null
     }
+    
+    async goToMySegmentsList () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li.category.category-header')
+        await this.page.screenshot({ path: 'screenshots/mySegments.png' })
+    }
+       
     async categoryMySegmentsIcon1Exist () {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(1) > svg:nth-child(1) > path') !== null
     }
@@ -137,9 +144,19 @@ export default class SegmentBuilder {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(1) > svg:nth-child(2) > path') !== null
     }
     async categoryMySegmentsNameExist () {
-        return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(2) > span') !== null
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(1) > span') !== null
     }
+    
+    async mySegmentsCount () {
+        return await this.page.$$eval('.draggable-list-item', ul => ul.length)
+    }  
+
+    // async tableHeadIDExist () {
+    //     return await this.page.$('') !== null
+    // } 
+
     // async tableHeadIDExist () {
     //     return await this.page.$('') !== null
     // }   
+
 }
