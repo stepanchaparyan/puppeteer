@@ -146,14 +146,21 @@ export default class SegmentBuilder {
     async categoryMySegmentsNameExist () {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(1) > span') !== null
     }
-    
     async mySegmentsCount () {
         return await this.page.$$eval('.draggable-list-item', ul => ul.length)
     }  
 
-    // async tableHeadIDExist () {
-    //     return await this.page.$('') !== null
-    // } 
+    async categoryTrafficSourceList () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(2)')
+        await this.page.waitForSelector('.draggable-list-item');
+        const subCategories = await this.page.evaluate(() => {
+        const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+        return cards.map(card => card.innerText).slice(0, 10)
+        })
+        console.log('____________  ' + subCategories)
+       
+        return subCategories 
+    } 
 
     // async tableHeadIDExist () {
     //     return await this.page.$('') !== null

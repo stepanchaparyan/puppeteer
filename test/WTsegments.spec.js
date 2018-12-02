@@ -141,7 +141,7 @@ describe.skip(`addSegment page's elements exist`, async () => {
   })
 })
 
-describe(`mySegment page's elements exist`, async () => {
+describe.skip(`mySegment page's elements exist`, async () => {
   beforeEach(async () => {
     segmentBuilder = new SegmentBuilder(page)
     await segmentBuilder.open()
@@ -149,7 +149,6 @@ describe(`mySegment page's elements exist`, async () => {
     await segmentBuilder.goToAddSegmentPage()
     await segmentBuilder.goToMySegmentsList()
   })
-
   it('categoryMySegmentsIcon1Exist', async () => {
     expect(await segmentBuilder.categoryMySegmentsIcon1Exist()).to.be.true; 
   })
@@ -159,19 +158,31 @@ describe(`mySegment page's elements exist`, async () => {
   it('categoryMySegmentsNameExist', async () => {
     expect(await segmentBuilder.categoryMySegmentsNameExist()).to.be.true; 
   })
-  it.only('mySegmentsCount', async () => {
+  it('mySegmentsCount', async () => {
     expect(await segmentBuilder.mySegmentsCount()).to.equal(8); 
-
   })
+})
 
-  // it('dropAttributeHereFieldExist', async () => {
-  //   expect(await segmentBuilder.dropAttributeHereFieldExist()).to.be.true; 
+describe(`segments' categories exist`, async () => {
+  beforeEach(async () => {
+    segmentBuilder = new SegmentBuilder(page)
+    await segmentBuilder.open()
+    await segmentBuilder.logIn()
+    await segmentBuilder.goToAddSegmentPage()
+  })
+  it('categoryTrafficSourceExist', async () => {
+    expect(await segmentBuilder.categoryTrafficSourceList()).to.deep.equal([ `Referrer\n`, `Current URL\n`, `Referrer: Host\n`, `Search Engine Keyword\n`, `Referrer: Attribute\n` ]);
+  })
+  
+  // it('categoryMySegmentsIcon2Exist', async () => {
+  //   expect(await segmentBuilder.categoryMySegmentsIcon2Exist()).to.be.true; 
   // })
-
-  // it('dropAttributeHereFieldExist', async () => {
-  //   expect(await segmentBuilder.dropAttributeHereFieldExist()).to.be.true; 
+  // it('categoryMySegmentsNameExist', async () => {
+  //   expect(await segmentBuilder.categoryMySegmentsNameExist()).to.be.true; 
   // })
-
+  // it('mySegmentsCount', async () => {
+  //   expect(await segmentBuilder.mySegmentsCount()).to.equal(8); 
+  // })
 })
 
 afterEach(async () => {
