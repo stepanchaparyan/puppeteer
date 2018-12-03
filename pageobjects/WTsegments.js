@@ -154,13 +154,67 @@ export default class SegmentBuilder {
         await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(2)')
         await this.page.waitForSelector('.draggable-list-item');
         const subCategories = await this.page.evaluate(() => {
-        const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
-        return cards.map(card => card.innerText).slice(0, 10)
+            const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+            return cards.map(card => card.innerText)
         })
-        console.log('____________  ' + subCategories)
-       
         return subCategories 
     } 
+    async categoryTechnologyList () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(3)')
+        await this.page.waitForSelector('.draggable-list-item');
+        const subCategories = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+            return cards.map(card => card.innerText)
+        })
+        return subCategories 
+    } 
+    async categoryLocationList () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(4)')
+        await this.page.waitForSelector('.draggable-list-item');
+        const subCategories = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+            return cards.map(card => card.innerText)
+        })
+        return subCategories 
+    }
+    async categoryDateAndTimeList () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(5)')
+        await this.page.waitForSelector('.draggable-list-item');
+        const subCategories = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+            return cards.map(card => card.innerText)
+        })
+        return subCategories 
+    }
+    async categoryDemographicsList () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(6)')
+        await this.page.waitForSelector('.draggable-list-item');
+        const subCategories = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+            return cards.map(card => card.innerText)
+        })
+        return subCategories 
+    }    
+    async categoryAdvancedList () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(7)')
+        await this.page.waitForSelector('.draggable-list-item');
+        const subCategories = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+            return cards.map(card => card.innerText)
+        })
+        console.log('____________  ' + subCategories)
+        return subCategories 
+    }        
+    async categoryDataTableList () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(8)')
+        await this.page.waitForSelector('.draggable-list-item');
+        const subCategories = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+            return cards.map(card => card.innerText)
+        })
+        console.log('____________  ' + subCategories)
+        return subCategories 
+    }
 
     // async tableHeadIDExist () {
     //     return await this.page.$('') !== null

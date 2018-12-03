@@ -171,18 +171,28 @@ describe(`segments' categories exist`, async () => {
     await segmentBuilder.goToAddSegmentPage()
   })
   it('categoryTrafficSourceExist', async () => {
-    expect(await segmentBuilder.categoryTrafficSourceList()).to.deep.equal([ `Referrer\n`, `Current URL\n`, `Referrer: Host\n`, `Search Engine Keyword\n`, `Referrer: Attribute\n` ]);
+    expect(await segmentBuilder.categoryTrafficSourceList()).to.deep.equal([ `Referrer\n`, `Current URL\n`, `Referrer: Host\n`, `Search Engine Keyword\n`, `Referrer: Attribute\n` ])
   })
-  
-  // it('categoryMySegmentsIcon2Exist', async () => {
-  //   expect(await segmentBuilder.categoryMySegmentsIcon2Exist()).to.be.true; 
-  // })
-  // it('categoryMySegmentsNameExist', async () => {
-  //   expect(await segmentBuilder.categoryMySegmentsNameExist()).to.be.true; 
-  // })
-  // it('mySegmentsCount', async () => {
-  //   expect(await segmentBuilder.mySegmentsCount()).to.equal(8); 
-  // })
+  it('categoryTechnologyExist', async () => {
+    expect(await segmentBuilder.categoryTechnologyList()).to.deep.equal([ "Desktop Browser\n", "Mobile Browser\n", "Connection Speed\n", "Domain Controller Company\n", "IP Address\n", "ISP\n", "Desktop OS\n", "Mobile OS\n" ])
+  })
+  it('categoryLocationExist', async () => {
+    expect(await segmentBuilder.categoryLocationList()).to.deep.equal([ "Area Code\n", "City\n", "City Confidence\n", "Continent Code\n", "Country Code\n", "Country Confidence\n", "Country Name\n", "IP Address\n", "Latitude\n", "Longitude\n", "Lat & Long\n", "Postal Code\n", "Region Confidence\n", "Region Name\n" ])
+  }) 
+  it('categoryDate&TimeExist', async () => {
+    expect(await segmentBuilder.categoryDateAndTimeList()).to.deep.equal([ "Date\n", "Day\n", "Time\n", "Time Zone\n" ])
+  }) 
+  it('categoryDemographicsExist', async () => {
+    expect(await segmentBuilder.categoryDemographicsList()).to.deep.equal([ "CBSA Code\n", "CBSA Title\n", "CBSA type\n", "CSA Code\n", "CSA Title\n", "Designated Market Area\n", "DMA Population: Households\n", "DMA Population: Kids\n", "DMA Population: Men\n", "DMA Population: Men 18-34\n", "DMA Population: Men 35-49\n", "DMA Population: Teens\n", "DMA Population: Women\n", "DMA Population: Women 18-34\n", "DMA Population: Women 35-49\n", "DMA Rank\n", "Hometype\n", "Primary Language\n", "NAICS code\n" ])
+  }) 
+  it.only('categoryAdvancedExist', async () => {
+    expect(await segmentBuilder.categoryAdvancedList()).to.deep.equal([ "Area Code\n", "Region Name\n" ])
+  }) 
+  // it.only('categoryDataTableExist', async () => {
+  //   expect(await segmentBuilder.categoryDataTableList()).to.deep.equal([ "Area Code\n", "Region Name\n" ])
+  // }) 
+
+
 })
 
 afterEach(async () => {
