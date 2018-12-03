@@ -185,11 +185,23 @@ describe(`segments' categories exist`, async () => {
   it('categoryDemographicsExist', async () => {
     expect(await segmentBuilder.categoryDemographicsList()).to.deep.equal([ "CBSA Code\n", "CBSA Title\n", "CBSA type\n", "CSA Code\n", "CSA Title\n", "Designated Market Area\n", "DMA Population: Households\n", "DMA Population: Kids\n", "DMA Population: Men\n", "DMA Population: Men 18-34\n", "DMA Population: Men 35-49\n", "DMA Population: Teens\n", "DMA Population: Women\n", "DMA Population: Women 18-34\n", "DMA Population: Women 35-49\n", "DMA Rank\n", "Hometype\n", "Primary Language\n", "NAICS code\n" ])
   }) 
-  it.only('categoryAdvancedExist', async () => {
-    expect(await segmentBuilder.categoryAdvancedList()).to.deep.equal([ "Area Code\n", "Region Name\n" ])
+  it('categoryAdvancedExist', async () => {
+    expect(await segmentBuilder.categoryAdvancedList()).to.deep.equal([ "User Agent\n", "Cookie Data\n", "Data Object Attribute\n", "Meta Tag\n", "Request Attribute\n", "Query String Attribute\n", "Random\n" ])
   }) 
-  // it.only('categoryDataTableExist', async () => {
-  //   expect(await segmentBuilder.categoryDataTableList()).to.deep.equal([ "Area Code\n", "Region Name\n" ])
+  it('categoryDataTableExist', async () => {
+    expect(await segmentBuilder.categoryDataTableList()).to.deep.equal([ "col", "KPI Table", "Standards Table", "testTable" ])
+  }) 
+  it.only('categoryDataTableColExist', async () => {
+    expect(await segmentBuilder.categoryDataTableColList()).to.deep.equal([ "col1", "col2", "UID" ])
+  }) 
+  // it.only('categoryDataTableKPITableExist', async () => {
+  //   expect(await segmentBuilder.categoryDataTableKPITableList()).to.deep.equal([ "col", "KPI Table", "Standards Table", "testTable" ])
+  // }) 
+  // it.only('categoryDataTableStandardsTableExist', async () => {
+  //   expect(await segmentBuilder.categoryDataTableStandardTableList()).to.deep.equal([ "col", "KPI Table", "Standards Table", "testTable" ])
+  // }) 
+  // it.only('categoryDataTableTestTableExist', async () => {
+  //   expect(await segmentBuilder.categoryDataTabletestTableList()).to.deep.equal([ "col", "KPI Table", "Standards Table", "testTable" ])
   // }) 
 
 

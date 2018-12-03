@@ -202,20 +202,47 @@ export default class SegmentBuilder {
             const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
             return cards.map(card => card.innerText)
         })
-        console.log('____________  ' + subCategories)
         return subCategories 
     }        
     async categoryDataTableList () {
         await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(8)')
-        await this.page.waitForSelector('.draggable-list-item');
+        await this.page.waitForSelector('.category');
         const subCategories = await this.page.evaluate(() => {
-            const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+            const cards = Array.from(document.querySelectorAll('.category'))
             return cards.map(card => card.innerText)
         })
-        console.log('____________  ' + subCategories)
         return subCategories 
     }
 
+    // TODO click func
+
+    // async categoryDataTableColList () {
+    //     await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(7)')
+    //     await this.page.waitForSelector('.draggable-list-item');
+    //     const subCategories = await this.page.evaluate(() => {
+    //         const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+    //         return cards.map(card => card.innerText)
+    //     })
+    //     return subCategories 
+    // }
+    // async categoryDataTableColList () {
+    //     await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(7)')
+    //     await this.page.waitForSelector('.draggable-list-item');
+    //     const subCategories = await this.page.evaluate(() => {
+    //         const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+    //         return cards.map(card => card.innerText)
+    //     })
+    //     return subCategories 
+    // }
+    // async categoryDataTableColList () {
+    //     await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(7)')
+    //     await this.page.waitForSelector('.draggable-list-item');
+    //     const subCategories = await this.page.evaluate(() => {
+    //         const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+    //         return cards.map(card => card.innerText)
+    //     })
+    //     return subCategories 
+    // }
     // async tableHeadIDExist () {
     //     return await this.page.$('') !== null
     // }   
