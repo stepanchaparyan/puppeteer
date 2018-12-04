@@ -214,35 +214,48 @@ export default class SegmentBuilder {
         return subCategories 
     }
 
-    // TODO click func
+    async goToDataTableCategoryList () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(8)')
+        await this.page.screenshot({ path: 'screenshots/DataTableCategory.png' })
+    }
+    async categoryDataTableColList () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(1)')
+        await this.page.waitForSelector('.draggable-list-item');
+        const subCategories = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+            return cards.map(card => card.innerText)
+        })
+        return subCategories 
+    }
+    async categoryDataTableKPITableList () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(2)')
+        await this.page.waitForSelector('.draggable-list-item');
+        const subCategories = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+            return cards.map(card => card.innerText)
+        })
+        return subCategories 
+    }
+    async categoryDataTableStandardTableList () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(3)')
+        await this.page.waitForSelector('.draggable-list-item');
+        const subCategories = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+            return cards.map(card => card.innerText)
+        })
+        return subCategories 
+    }
+    async categoryDataTableTestTableList () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(4)')
+        await this.page.waitForSelector('.draggable-list-item');
+        const subCategories = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
+            return cards.map(card => card.innerText)
+        })
+        return subCategories 
+    }
 
-    // async categoryDataTableColList () {
-    //     await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(7)')
-    //     await this.page.waitForSelector('.draggable-list-item');
-    //     const subCategories = await this.page.evaluate(() => {
-    //         const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
-    //         return cards.map(card => card.innerText)
-    //     })
-    //     return subCategories 
-    // }
-    // async categoryDataTableColList () {
-    //     await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(7)')
-    //     await this.page.waitForSelector('.draggable-list-item');
-    //     const subCategories = await this.page.evaluate(() => {
-    //         const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
-    //         return cards.map(card => card.innerText)
-    //     })
-    //     return subCategories 
-    // }
-    // async categoryDataTableColList () {
-    //     await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(7)')
-    //     await this.page.waitForSelector('.draggable-list-item');
-    //     const subCategories = await this.page.evaluate(() => {
-    //         const cards = Array.from(document.querySelectorAll('.draggable-list-item'))
-    //         return cards.map(card => card.innerText)
-    //     })
-    //     return subCategories 
-    // }
+
     // async tableHeadIDExist () {
     //     return await this.page.$('') !== null
     // }   

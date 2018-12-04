@@ -191,19 +191,23 @@ describe(`segments' categories exist`, async () => {
   it('categoryDataTableExist', async () => {
     expect(await segmentBuilder.categoryDataTableList()).to.deep.equal([ "col", "KPI Table", "Standards Table", "testTable" ])
   }) 
-  it.only('categoryDataTableColExist', async () => {
-    expect(await segmentBuilder.categoryDataTableColList()).to.deep.equal([ "col1", "col2", "UID" ])
-  }) 
-  // it.only('categoryDataTableKPITableExist', async () => {
-  //   expect(await segmentBuilder.categoryDataTableKPITableList()).to.deep.equal([ "col", "KPI Table", "Standards Table", "testTable" ])
-  // }) 
-  // it.only('categoryDataTableStandardsTableExist', async () => {
-  //   expect(await segmentBuilder.categoryDataTableStandardTableList()).to.deep.equal([ "col", "KPI Table", "Standards Table", "testTable" ])
-  // }) 
-  // it.only('categoryDataTableTestTableExist', async () => {
-  //   expect(await segmentBuilder.categoryDataTabletestTableList()).to.deep.equal([ "col", "KPI Table", "Standards Table", "testTable" ])
-  // }) 
-
+  context.only('dataTableCategoriesExist', async () => {
+    beforeEach(async () => {
+      await segmentBuilder.goToDataTableCategoryList()
+    })
+    it('categoryDataTableColExist', async () => {
+      expect(await segmentBuilder.categoryDataTableColList()).to.deep.equal([ "col1\n", "col2\n", "UID\n" ])
+    }) 
+    it('categoryDataTableKPITableExist', async () => {
+      expect(await segmentBuilder.categoryDataTableKPITableList()).to.deep.equal([ "Abandoned Cart Value\n", "Items in Cart\n", "Items Purchased\n", "Time to Purchase\n", "Total Value in Cart\n", "Total Value Purchased\n", "UID\n" ])
+    }) 
+    it('categoryDataTableStandardsTableExist', async () => {
+      expect(await segmentBuilder.categoryDataTableStandardTableList()).to.deep.equal([ "AreaCode\n", "ASN\n", "ASNName\n", "Browser\n", "CBSACode\n", "CBSATitle\n", "CBSAType\n", "City\n", "CompanyName\n", "ConnectionSpeed\n",  "ContinentCode\n", "CountryCode\n", "CountryConf\n", "CountryName\n", "CSACode\n", "CSATitle\n", "DCCompanyName\n", "DMACode\n", "DomainName\n", "GMTOffset\n", "HomeBizType\n", "Households\n", "INDST\n", "IP\n", "ISPName\n", "Latitude\n", "Longitude\n", "MDCode\n", "MDTitle\n", "Men\n", "Men18_34\n", "Men35_49\n", "NAICSCode\n", "NumberOfKids\n", "NumberOfTeens\n", "OS\n", "Postal Code\n", "PrimaryLanguage\n", "ProxyType\n", "Rank\n", "Referer\n", "Region\n", "RegionConf\n", "RegionName\n", "SecondayLanguage\n", "SICCode\n", "Timezone\n", "UID\n", "UserAgent\n", "Women\n", "Women18_34\n", "Women35_49\n" ])
+    }) 
+    it('categoryDataTableTestTableExist', async () => {
+      expect(await segmentBuilder.categoryDataTableTestTableList()).to.deep.equal([ "country\n", "UID\n" ])
+    }) 
+  })
 
 })
 
