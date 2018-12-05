@@ -94,7 +94,7 @@ describe('list.am nabvar Elements', () => {
     await menuBar.open()
     await menuBar.logIn()
   })
-  it.skip('test', async () => {
+  it('test', async () => {
     const title = await menuBar.getTitle()
     console.log("title: " + title)
     // TODO expect($('#ma')).to.exist;
@@ -124,7 +124,7 @@ describe('list.am nabvar Elements', () => {
   })
 })
 
-describe.only('list.am language bar', () => {
+describe('list.am language bar', () => {
   beforeEach(async () => {
     menuBar = new MenuBar(page)
     await menuBar.open()
