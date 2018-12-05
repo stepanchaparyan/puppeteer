@@ -92,6 +92,22 @@ describe(`first page's elements exist`, async () => {
   })
 })
 
+describe.only(`first page's functionality`, async () => {
+  beforeEach(async () => {
+    segmentBuilder = new SegmentBuilder(page)
+    await segmentBuilder.open()
+    await segmentBuilder.logIn()
+  })
+  context("mainPart", async() => {
+    it('InUseWorks', async () => {
+      expect(await segmentBuilder.inUseFunctionality()).to.be.true; 
+    })
+    it.only('notInUseWorks', async () => {
+      expect(await segmentBuilder.notInUseFunctionality()).to.be.true; 
+    })
+  })
+})    
+
 afterEach(async () => {
   await browser.close()
 })

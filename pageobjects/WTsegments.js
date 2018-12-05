@@ -48,7 +48,6 @@ export default class SegmentBuilder {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div > span:nth-child(3)') !== null
     }
     
-
     async tableHeadSegmentsExist () {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > thead > tr > th:nth-child(1)') !== null
     }
@@ -89,10 +88,23 @@ export default class SegmentBuilder {
     async tableRowHiddenIconExist () {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(1) > td.td--buttons > svg > path') !== null
     }
-    
-    
-    // async tableHeadIDExist () {
-    //     return await this.page.$('') !== null
-    // }   
 
+    async inUseFunctionality () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div > span:nth-child(2)')
+        const isNotZero = (currentValue) => currentValue > 0 
+        const inUseSegments = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)'))
+            return cards.map(card => card.innerText)
+        })
+        return await inUseSegments.every(isNotZero)
+    }
+    async notInUseFunctionality () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div > span:nth-child(3)')
+        const isZero = (currentValue) => currentValue == 0 
+        const notInUseSegments = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)'))
+            return cards.map(card => card.innerText)
+        })
+        return await notInUseSegments.every(isZero)
+    }
 }
