@@ -134,44 +134,45 @@ export default class SegmentBuilder {
     }
 
     async orderBySegmentsName () {
-        const orderedSgments = await this.page.evaluate(() => {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > thead > tr > th:nth-child(1)')
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > thead > tr > th:nth-child(1)')
+        const orderedSegments = await this.page.evaluate(() => {
             const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(1)'))
             return cards.map(card => card.innerText).slice(0,2)
         })
-        console.log()
-        return await orderedSgments
+        return await orderedSegments
     }
-    // async orderByID () {
-    //     const isNotZero = (currentValue) => currentValue > 0 
-    //     const inUseSegments = await this.page.evaluate(() => {
-    //         const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)'))
-    //         return cards.map(card => card.innerText)
-    //     })
-    //     return await inUseSegments.every(isNotZero)
-    // }
-    // async orderByUseCount () {
-    //     const isNotZero = (currentValue) => currentValue > 0 
-    //     const inUseSegments = await this.page.evaluate(() => {
-    //         const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)'))
-    //         return cards.map(card => card.innerText)
-    //     })
-    //     return await inUseSegments.every(isNotZero)
-    // }
-    // async orderByModified () {
-    //     const isNotZero = (currentValue) => currentValue > 0 
-    //     const inUseSegments = await this.page.evaluate(() => {
-    //         const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)'))
-    //         return cards.map(card => card.innerText)
-    //     })
-    //     return await inUseSegments.every(isNotZero)
-    // }
-    // async orderByCreated () {
-    //     const isNotZero = (currentValue) => currentValue > 0 
-    //     const inUseSegments = await this.page.evaluate(() => {
-    //         const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)'))
-    //         return cards.map(card => card.innerText)
-    //     })
-    //     return await inUseSegments.every(isNotZero)
-    // }
+    async orderByID () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > thead > tr > th:nth-child(2)')
+        const orderedSegments = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(2)'))
+            return cards.map(card => card.innerText)
+        })
+        return await Math.max(...orderedSegments)
+    }
+    async orderByUseCount () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > thead > tr > th:nth-child(3)')
+        const orderedSegments = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)'))
+            return cards.map(card => card.innerText)
+        })
+        return await Math.max(...orderedSegments)
+    }
+    async orderByModified () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > thead > tr > th:nth-child(4)')
+        const orderedSegments = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(4)'))
+            return cards.map(card => card.innerText)
+        })
+        return await orderedSegments.slice(0,1)
+    }
+    async orderByCreated () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > thead > tr > th:nth-child(5)')
+        const orderedSegments = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(5)'))
+            return cards.map(card => card.innerText)
+        })
+        return await orderedSegments.slice(0,1)
+    }
 
 }

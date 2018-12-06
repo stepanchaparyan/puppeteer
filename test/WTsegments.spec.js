@@ -116,20 +116,20 @@ describe.only(`first page's functionality`, async () => {
     })
   })
   context("orderSegmentsByHeader", async() => {
-    it.only('orderBySegmentsName', async () => {
-      expect(await segmentBuilder.orderBySegmentsName()).to.deep.equal([ "Armenia", "Armenia2" ])
+    it('orderBySegmentsName', async () => {
+      expect(await segmentBuilder.orderBySegmentsName()).to.deep.equal([ "Armenia", "Armenia 2" ])
     })
     it('orderByID', async () => {
-      expect(await segmentBuilder.orderByID()).to.be.true; 
+      expect(await segmentBuilder.orderByID()).equal(1883375)
     })
     it('orderByUseCount', async () => {
-      expect(await segmentBuilder.orderByUseCount()).equal(8); 
+      expect(await segmentBuilder.orderByUseCount()).equal(3); 
     })
     it('orderByModified', async () => {
-      expect(await segmentBuilder.orderByModified()).equal(2) 
+      expect(await segmentBuilder.orderByModified()).to.deep.equal([ '12/4/2018' ]) 
     })
-    it('orderByCreated', async () => {
-      expect(await segmentBuilder.orderByCreated()).equal(10) 
+    it.only('orderByCreated', async () => {
+      expect(await segmentBuilder.orderByCreated()).to.deep.equal([ '12/4/2018' ]) 
     })
   })
   context("navBarSegments", async() => {
