@@ -192,8 +192,4 @@ export default class SegmentBuilder {
     }
 
 
-    // async tableHeadIDExist () {
-    //     return await this.page.$('') !== null
-    // }   
-
 }

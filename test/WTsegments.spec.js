@@ -98,13 +98,48 @@ describe.only(`first page's functionality`, async () => {
     await segmentBuilder.open()
     await segmentBuilder.logIn()
   })
-  context("mainPart", async() => {
+  context("orderSegmentsByUse", async() => {
     it('InUseWorks', async () => {
-      expect(await segmentBuilder.inUseFunctionality()).to.be.true; 
+      expect(await segmentBuilder.orderByInUse()).to.be.true; 
     })
-    it.only('notInUseWorks', async () => {
-      expect(await segmentBuilder.notInUseFunctionality()).to.be.true; 
+    it('notInUseWorks', async () => {
+      expect(await segmentBuilder.orderByNotInUse()).to.be.true; 
     })
+    it('inUseSegmentsCount', async () => {
+      expect(await segmentBuilder.inUseSegmentsCount()).equal(8); 
+    })
+    it('notInUseSegmentsCount', async () => {
+      expect(await segmentBuilder.notInUseSegmentsCount()).equal(2) 
+    })
+    it('allSegmentsCount', async () => {
+      expect(await segmentBuilder.allSegmentsCount()).equal(10) 
+    })
+  })
+  context("orderSegmentsByHeader", async() => {
+    it.only('orderBySegmentsName', async () => {
+      expect(await segmentBuilder.orderBySegmentsName()).to.deep.equal([ "Armenia", "Armenia2" ])
+    })
+    it('orderByID', async () => {
+      expect(await segmentBuilder.orderByID()).to.be.true; 
+    })
+    it('orderByUseCount', async () => {
+      expect(await segmentBuilder.orderByUseCount()).equal(8); 
+    })
+    it('orderByModified', async () => {
+      expect(await segmentBuilder.orderByModified()).equal(2) 
+    })
+    it('orderByCreated', async () => {
+      expect(await segmentBuilder.orderByCreated()).equal(10) 
+    })
+  })
+  context("navBarSegments", async() => {
+    it('searchSegment', async () => {
+      expect(await segmentBuilder.searchSegment()).equal(2) 
+    })
+    it('gotToAddSegmentpage', async () => {
+      expect(await segmentBuilder.gotoAddSegmentPage()).to.be.true; 
+    })
+    
   })
 })    
 

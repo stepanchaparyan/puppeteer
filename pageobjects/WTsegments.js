@@ -89,7 +89,7 @@ export default class SegmentBuilder {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(1) > td.td--buttons > svg > path') !== null
     }
 
-    async inUseFunctionality () {
+    async orderByInUse () {
         await this.page.click('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div > span:nth-child(2)')
         const isNotZero = (currentValue) => currentValue > 0 
         const inUseSegments = await this.page.evaluate(() => {
@@ -98,7 +98,12 @@ export default class SegmentBuilder {
         })
         return await inUseSegments.every(isNotZero)
     }
-    async notInUseFunctionality () {
+    async inUseSegmentsCount () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div > span:nth-child(2)')
+        const inUseSegmentsCount = await this.page.$$eval('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)', segments => segments.length);
+        return await inUseSegmentsCount
+    }
+    async orderByNotInUse () {
         await this.page.click('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div > span:nth-child(3)')
         const isZero = (currentValue) => currentValue == 0 
         const notInUseSegments = await this.page.evaluate(() => {
@@ -107,4 +112,66 @@ export default class SegmentBuilder {
         })
         return await notInUseSegments.every(isZero)
     }
+    async notInUseSegmentsCount () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div > span:nth-child(3)')
+        const notInUseSegmentsCount = await this.page.$$eval('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)', segments => segments.length);
+        return await notInUseSegmentsCount
+    }
+    async allSegmentsCount () {
+        const allSegmentsCount = await this.page.$$eval('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)', segments => segments.length);
+        return await allSegmentsCount
+    }
+
+    async searchSegment () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(1) > div > div > span.section-header__toolbar > div > input')
+        await this.page.type('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)', 'Arm')
+        const allSegmentsCount = await this.page.$$eval('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)', segments => segments.length);
+        return await allSegmentsCount
+    }
+    async gotoAddSegmentPage () {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(1) > div > div > span.section-header__toolbar > button > svg')
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li.category.category-header') !== null
+    }
+
+    async orderBySegmentsName () {
+        const orderedSgments = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(1)'))
+            return cards.map(card => card.innerText).slice(0,2)
+        })
+        console.log()
+        return await orderedSgments
+    }
+    // async orderByID () {
+    //     const isNotZero = (currentValue) => currentValue > 0 
+    //     const inUseSegments = await this.page.evaluate(() => {
+    //         const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)'))
+    //         return cards.map(card => card.innerText)
+    //     })
+    //     return await inUseSegments.every(isNotZero)
+    // }
+    // async orderByUseCount () {
+    //     const isNotZero = (currentValue) => currentValue > 0 
+    //     const inUseSegments = await this.page.evaluate(() => {
+    //         const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)'))
+    //         return cards.map(card => card.innerText)
+    //     })
+    //     return await inUseSegments.every(isNotZero)
+    // }
+    // async orderByModified () {
+    //     const isNotZero = (currentValue) => currentValue > 0 
+    //     const inUseSegments = await this.page.evaluate(() => {
+    //         const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)'))
+    //         return cards.map(card => card.innerText)
+    //     })
+    //     return await inUseSegments.every(isNotZero)
+    // }
+    // async orderByCreated () {
+    //     const isNotZero = (currentValue) => currentValue > 0 
+    //     const inUseSegments = await this.page.evaluate(() => {
+    //         const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)'))
+    //         return cards.map(card => card.innerText)
+    //     })
+    //     return await inUseSegments.every(isNotZero)
+    // }
+
 }
