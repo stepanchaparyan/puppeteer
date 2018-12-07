@@ -175,4 +175,133 @@ export default class SegmentBuilder {
         return await orderedSegments.slice(0,1)
     }
 
+    async makeScreenshotForSegUsedSegmentUpdate() {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(11) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg')
+        await this.page.waitForSelector('body > div > div.fade.warning.modal-fixed.in.modal > div > div', {visible: true})
+        const overlay = await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div')  
+        await this.page.waitFor(1000)
+        await overlay.screenshot({path: 'screenshots/segmentBuilder/updateSegUsedSegment2.png'})
+    }
+    async makeScreenshotForTestUsedSegmentUpdate() {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(4) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg')
+        await this.page.waitForSelector('body > div > div.fade.warning.modal-fixed.in.modal > div > div', {visible: true})
+        const overlay = await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div')  
+        await this.page.waitFor(1000)
+        await overlay.screenshot({path: 'screenshots/segmentBuilder/updateTestUsedSegment2.png'})
+    }
+    async updateSegUsedSegment () {
+        const img1 = fs.createReadStream('screenshots/segmentBuilder/updateSegUsedSegment1.png').pipe(new PNG()).on('parsed', doneReading)
+        const img2 = fs.createReadStream('screenshots/segmentBuilder/updateSegUsedSegment2.png').pipe(new PNG()).on('parsed', doneReading)
+        let filesRead = 0
+        let numDiffPixel
+
+        function doneReading() {
+            if (++filesRead < 2) return
+            let diff = new PNG({width: img1.width, height: img1.height})
+            numDiffPixel = pixelmatch(img1.data, img2.data, diff.data, img1.width, img1.height, {threshold: 0.1})
+            //console.log("pixel diff is: " + numDiffPixel)
+            //diff.pack().pipe(fs.createWriteStream('screenshots/segmentBuilder/diff1.png'))
+            expect(numDiffPixel).equal(0)
+        }
+    }
+    async updateTestUsedSegment () {
+        const img1 = fs.createReadStream('screenshots/segmentBuilder/updateTestUsedSegment1.png').pipe(new PNG()).on('parsed', doneReading)
+        const img2 = fs.createReadStream('screenshots/segmentBuilder/updateTestUsedSegment2.png').pipe(new PNG()).on('parsed', doneReading)
+        let filesRead = 0
+        let numDiffPixel
+
+        function doneReading() {
+            if (++filesRead < 2) return
+            let diff = new PNG({width: img1.width, height: img1.height})
+            numDiffPixel = pixelmatch(img1.data, img2.data, diff.data, img1.width, img1.height, {threshold: 0.1})
+            //console.log("pixel diff is: " + numDiffPixel)
+            //diff.pack().pipe(fs.createWriteStream('screenshots/segmentBuilder/diff2.png'))
+            expect(numDiffPixel).equal(0)
+        }
+    }
+
+    // edit/update segment which is not used by other test/target or segment
+    async updateSegment() {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(6) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg')
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-header.row > div > div:nth-child(1) > div > span.section-label.section-label__edit') !== null
+    }
+    // cancel button on update modal if segment used by other segment
+    async cancelUpdateSegmentUsedByOtherSegment() {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(11) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg')
+        await this.page.waitForSelector('body > div > div.fade.warning.modal-fixed.in.modal > div > div', {visible: true})
+        await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button') !== null
+        await this.page.click('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button')
+        return await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button') == null
+    }
+    // cancel button on update modal if segment used by other test/target
+    async cancelUpdateSegmentUsedByTest() {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(4) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg')
+        await this.page.waitForSelector('body > div > div.fade.warning.modal-fixed.in.modal > div > div', {visible: true})
+        await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button.primary.with-text.btn.btn-link') !== null
+        await this.page.click('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button')
+        return await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button') == null
+    }
+    // edit button on update modal if segment used by other test/target
+    async editSegmentUsedByTest() {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(4) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg')
+        await this.page.waitForSelector('body > div > div.fade.warning.modal-fixed.in.modal > div > div', {visible: true})
+        await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button.edit.with-text.btn.btn-primary') !== null
+        await this.page.click('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button.edit.with-text.btn.btn-primary')
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-header.row > div > div:nth-child(1) > div > span.section-label.section-label__edit') !== null
+    }
+
+    async makeScreenshotForSegUsedSegmentDelete() {
+        await this.page.hover('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(2)')
+        
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(2) > td:nth-child(6) > button:nth-child(2)')
+
+        await this.page.waitFor(2000)
+        //await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div.col-md-4.col-sm-12.col-xs-12 > div > div > table > tbody > tr.tr__selected--edit > td.td--buttons > button.icon-button.delete.btn.btn-link > svg')
+        //await this.page.waitFor(2000)
+
+        await this.page.screenshot({path: 'screenshots/segmentBuilder/deleteSegUsedSegment222.png'})
+
+        //await this.page.waitForSelector('body > div > div.fade.warning.modal-fixed.in.modal > div > div', {visible: true})
+        // const overlay = await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div')  
+        // await this.page.waitFor(1000)
+        // await overlay.screenshot({path: 'screenshots/segmentBuilder/deleteSegUsedSegment2.png'})
+    }
+    async makeScreenshotForTestUsedSegmentDelete() {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(4) > td.td--buttons > button.icon-button.delete.btn.btn-link > svg')
+        await this.page.waitForSelector('body > div > div.fade.warning.modal-fixed.in.modal > div > div', {visible: true})
+        const overlay = await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div')  
+        await this.page.waitFor(1000)
+        await overlay.screenshot({path: 'screenshots/segmentBuilder/deleteTestUsedSegment2.png'})
+    }
+    async updateSegUsedSegment () {
+        const img1 = fs.createReadStream('screenshots/segmentBuilder/updateSegUsedSegment1.png').pipe(new PNG()).on('parsed', doneReading)
+        const img2 = fs.createReadStream('screenshots/segmentBuilder/updateSegUsedSegment2.png').pipe(new PNG()).on('parsed', doneReading)
+        let filesRead = 0
+        let numDiffPixel
+
+        function doneReading() {
+            if (++filesRead < 2) return
+            let diff = new PNG({width: img1.width, height: img1.height})
+            numDiffPixel = pixelmatch(img1.data, img2.data, diff.data, img1.width, img1.height, {threshold: 0.1})
+            //console.log("pixel diff is: " + numDiffPixel)
+            //diff.pack().pipe(fs.createWriteStream('screenshots/segmentBuilder/diff1.png'))
+            expect(numDiffPixel).equal(0)
+        }
+    }
+    async updateTestUsedSegment () {
+        const img1 = fs.createReadStream('screenshots/segmentBuilder/updateTestUsedSegment1.png').pipe(new PNG()).on('parsed', doneReading)
+        const img2 = fs.createReadStream('screenshots/segmentBuilder/updateTestUsedSegment2.png').pipe(new PNG()).on('parsed', doneReading)
+        let filesRead = 0
+        let numDiffPixel
+
+        function doneReading() {
+            if (++filesRead < 2) return
+            let diff = new PNG({width: img1.width, height: img1.height})
+            numDiffPixel = pixelmatch(img1.data, img2.data, diff.data, img1.width, img1.height, {threshold: 0.1})
+            //console.log("pixel diff is: " + numDiffPixel)
+            //diff.pack().pipe(fs.createWriteStream('screenshots/segmentBuilder/diff2.png'))
+            expect(numDiffPixel).equal(0)
+        }
+    }
+
 }
