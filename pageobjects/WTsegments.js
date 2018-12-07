@@ -180,16 +180,16 @@ export default class SegmentBuilder {
         await this.page.waitForSelector('body > div > div.fade.warning.modal-fixed.in.modal > div > div', {visible: true})
         const overlay = await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div')  
         await this.page.waitFor(1000)
-        await overlay.screenshot({path: 'screenshots/segmentBuilder/updateSegUsedSegment2.png'})
+        await overlay.screenshot({path: 'screenshots/segmentBuilder/updateSegUsedSegment1.png'})
     }
     async makeScreenshotForTestUsedSegmentUpdate() {
         await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(4) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg')
         await this.page.waitForSelector('body > div > div.fade.warning.modal-fixed.in.modal > div > div', {visible: true})
         const overlay = await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div')  
         await this.page.waitFor(1000)
-        await overlay.screenshot({path: 'screenshots/segmentBuilder/updateTestUsedSegment2.png'})
+        await overlay.screenshot({path: 'screenshots/segmentBuilder/updateTestUsedSegment1.png'})
     }
-    async updateSegUsedSegment () {
+    async updateSegUsedSegmentModal () {
         const img1 = fs.createReadStream('screenshots/segmentBuilder/updateSegUsedSegment1.png').pipe(new PNG()).on('parsed', doneReading)
         const img2 = fs.createReadStream('screenshots/segmentBuilder/updateSegUsedSegment2.png').pipe(new PNG()).on('parsed', doneReading)
         let filesRead = 0
@@ -204,7 +204,7 @@ export default class SegmentBuilder {
             expect(numDiffPixel).equal(0)
         }
     }
-    async updateTestUsedSegment () {
+    async updateTestUsedSegmentModal () {
         const img1 = fs.createReadStream('screenshots/segmentBuilder/updateTestUsedSegment1.png').pipe(new PNG()).on('parsed', doneReading)
         const img2 = fs.createReadStream('screenshots/segmentBuilder/updateTestUsedSegment2.png').pipe(new PNG()).on('parsed', doneReading)
         let filesRead = 0
@@ -252,30 +252,23 @@ export default class SegmentBuilder {
 
     async makeScreenshotForSegUsedSegmentDelete() {
         await this.page.hover('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(2)')
-        
         await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(2) > td:nth-child(6) > button:nth-child(2)')
-
-        await this.page.waitFor(2000)
-        //await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div.col-md-4.col-sm-12.col-xs-12 > div > div > table > tbody > tr.tr__selected--edit > td.td--buttons > button.icon-button.delete.btn.btn-link > svg')
-        //await this.page.waitFor(2000)
-
-        await this.page.screenshot({path: 'screenshots/segmentBuilder/deleteSegUsedSegment222.png'})
-
-        //await this.page.waitForSelector('body > div > div.fade.warning.modal-fixed.in.modal > div > div', {visible: true})
-        // const overlay = await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div')  
-        // await this.page.waitFor(1000)
-        // await overlay.screenshot({path: 'screenshots/segmentBuilder/deleteSegUsedSegment2.png'})
-    }
-    async makeScreenshotForTestUsedSegmentDelete() {
-        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(4) > td.td--buttons > button.icon-button.delete.btn.btn-link > svg')
         await this.page.waitForSelector('body > div > div.fade.warning.modal-fixed.in.modal > div > div', {visible: true})
         const overlay = await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div')  
         await this.page.waitFor(1000)
-        await overlay.screenshot({path: 'screenshots/segmentBuilder/deleteTestUsedSegment2.png'})
+        await overlay.screenshot({path: 'screenshots/segmentBuilder/deleteSegUsedSegment1.png'})
     }
-    async updateSegUsedSegment () {
-        const img1 = fs.createReadStream('screenshots/segmentBuilder/updateSegUsedSegment1.png').pipe(new PNG()).on('parsed', doneReading)
-        const img2 = fs.createReadStream('screenshots/segmentBuilder/updateSegUsedSegment2.png').pipe(new PNG()).on('parsed', doneReading)
+    async makeScreenshotForTestUsedSegmentDelete() {
+        await this.page.hover('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(4)')
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(4) > td:nth-child(6) > button:nth-child(2)')
+        await this.page.waitForSelector('body > div > div.fade.warning.modal-fixed.in.modal > div > div', {visible: true})
+        const overlay = await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div')  
+        await this.page.waitFor(1000)
+        await overlay.screenshot({path: 'screenshots/segmentBuilder/deleteTestUsedSegment1.png'})
+    }
+    async deleteSegUsedSegmentModal () {
+        const img1 = fs.createReadStream('screenshots/segmentBuilder/deleteSegUsedSegment1.png').pipe(new PNG()).on('parsed', doneReading)
+        const img2 = fs.createReadStream('screenshots/segmentBuilder/deleteSegUsedSegment2.png').pipe(new PNG()).on('parsed', doneReading)
         let filesRead = 0
         let numDiffPixel
 
@@ -288,7 +281,7 @@ export default class SegmentBuilder {
             expect(numDiffPixel).equal(0)
         }
     }
-    async updateTestUsedSegment () {
+    async deleteTestUsedSegmentModal () {
         const img1 = fs.createReadStream('screenshots/segmentBuilder/updateTestUsedSegment1.png').pipe(new PNG()).on('parsed', doneReading)
         const img2 = fs.createReadStream('screenshots/segmentBuilder/updateTestUsedSegment2.png').pipe(new PNG()).on('parsed', doneReading)
         let filesRead = 0
@@ -302,6 +295,15 @@ export default class SegmentBuilder {
             //diff.pack().pipe(fs.createWriteStream('screenshots/segmentBuilder/diff2.png'))
             expect(numDiffPixel).equal(0)
         }
+    }
+
+    async cancelDeleteSegmentUsedByOtherSegment() {
+        await this.page.hover('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(2)')
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(2) > td:nth-child(6) > button:nth-child(2)')
+        await this.page.waitForSelector('body > div > div.fade.warning.modal-fixed.in.modal > div > div', {visible: true})
+        await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button') !== null
+        await this.page.click('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button')
+        return await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button') == null
     }
 
 }

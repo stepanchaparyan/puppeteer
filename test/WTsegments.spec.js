@@ -11,7 +11,7 @@ const showUI = {headless: false}
 const showSlowMotion = {headless: false, slowMo: 300}
 
 beforeEach(async () => {
-  browser = await puppeteer.launch(showUI)
+  browser = await puppeteer.launch()
   page = await browser.newPage()
   await page.setViewport(viewport)
 })
@@ -144,11 +144,11 @@ describe.only(`first page's functionality`, async () => {
   context("updateSegment", async() => {
     it('usedSegmentModalExist', async () => {
       await segmentBuilder.makeScreenshotForSegUsedSegmentUpdate()
-      //await segmentBuilder.updateSegUsedSegment()
+      await segmentBuilder.updateSegUsedSegmentModal()
     })
     it('notUsedSegmentModalExist', async () => {
       await segmentBuilder.makeScreenshotForTestUsedSegmentUpdate()
-      await segmentBuilder.updateTestUsedSegment()
+      await segmentBuilder.updateTestUsedSegmentModal()
     })
     it('updateSegment', async () => {
       expect(await segmentBuilder.updateSegment()).to.be.true; 
@@ -165,26 +165,26 @@ describe.only(`first page's functionality`, async () => {
   })
 
   context("deleteSegment", async() => {
-    it.only('usedSegmentModalExist', async () => {
+    it('usedSegmentModalExist', async () => {
       await segmentBuilder.makeScreenshotForSegUsedSegmentDelete()
-      //await segmentBuilder.updateSegment()
+      await segmentBuilder.deleteSegUsedSegmentModal()
     })
     it('usedTestModalExist', async () => {
       await segmentBuilder.makeScreenshotForTestUsedSegmentDelete()
-      //await segmentBuilder.updateSegment()
+      await segmentBuilder.deleteTestUsedSegmentModal()
     })
-    it('deleteSegment', async () => {
-      expect(await segmentBuilder.updateSegment()).to.be.true; 
+    // it('deleteSegment', async () => {
+    //   expect(await segmentBuilder.deleteSegment()).to.be.true; 
+    // }) 
+    it.only('cancelDeleteSegmentUsedByOtherSegment', async () => {
+      expect(await segmentBuilder.cancelDeleteSegmentUsedByOtherSegment()).to.be.true; 
     }) 
-    it('cancelUpdateSegmentUsedByOtherSegment', async () => {
-      expect(await segmentBuilder.cancelUpdateSegmentUsedByOtherSegment()).to.be.true; 
-    }) 
-    it('cancelUpdateSegmentUsedByTest', async () => {
-      expect(await segmentBuilder.cancelUpdateSegmentUsedByTest()).to.be.true; 
-    })  
-    it('editSegmentUsedByTest', async () => {
-      expect(await segmentBuilder.editSegmentUsedByTest()).to.be.true; 
-    }) 
+    // it('cancelDeleteSegmentUsedByTest', async () => {
+    //   expect(await segmentBuilder.cancelDeleteSegmentUsedByTest()).to.be.true; 
+    // })  
+    // it('deleteSegmentUsedByTest', async () => {
+    //   expect(await segmentBuilder.deleteSegmentUsedByTest()).to.be.true; 
+    // }) 
   })
 
   // // TODO  
