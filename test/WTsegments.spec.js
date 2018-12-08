@@ -140,7 +140,6 @@ describe.only(`first page's functionality`, async () => {
       expect(await segmentBuilder.gotoAddSegmentPage()).to.be.true; 
     })
   })  
-
   context("updateSegment", async() => {
     it('usedSegmentModalExist', async () => {
       await segmentBuilder.makeScreenshotForSegUsedSegmentUpdate()
@@ -163,7 +162,6 @@ describe.only(`first page's functionality`, async () => {
       expect(await segmentBuilder.editSegmentUsedByTest()).to.be.true; 
     }) 
   })
-
   context("deleteSegment", async() => {
     it('usedSegmentModalExist', async () => {
       await segmentBuilder.makeScreenshotForSegUsedSegmentDelete()
@@ -173,29 +171,24 @@ describe.only(`first page's functionality`, async () => {
       await segmentBuilder.makeScreenshotForTestUsedSegmentDelete()
       await segmentBuilder.deleteTestUsedSegmentModal()
     })
-    // it('deleteSegment', async () => {
-    //   expect(await segmentBuilder.deleteSegment()).to.be.true; 
-    // }) 
-    it.only('cancelDeleteSegmentUsedByOtherSegment', async () => {
-      expect(await segmentBuilder.cancelDeleteSegmentUsedByOtherSegment()).to.be.true; 
+    it('deleteSegment', async () => {
+      expect(await segmentBuilder.deleteSegment()).to.be.true
     }) 
-    // it('cancelDeleteSegmentUsedByTest', async () => {
-    //   expect(await segmentBuilder.cancelDeleteSegmentUsedByTest()).to.be.true; 
-    // })  
-    // it('deleteSegmentUsedByTest', async () => {
-    //   expect(await segmentBuilder.deleteSegmentUsedByTest()).to.be.true; 
-    // }) 
+    it('cancelDeleteSegment', async () => {
+      expect(await segmentBuilder.cancelDeleteSegment()).to.be.true
+    }) 
+    it('cancelDeleteSegmentUsedByOtherSegment', async () => {
+      expect(await segmentBuilder.cancelDeleteSegmentUsedByOtherSegment()).to.be.true 
+    }) 
+    it('cancelDeleteSegmentUsedByTest', async () => {
+      expect(await segmentBuilder.cancelDeleteSegmentUsedByTest()).to.be.true
+    })  
   })
-
-  // // TODO  
-  // context.skip("detailsPage", async() => {
-  //   it('', async () => {
-  //     expect(await segmentBuilder.s()).equal(2) 
-  //   })
-  //   it('', async () => {
-  //     expect(await segmentBuilder.g()).to.be.true; 
-  //   })   
-  
+  context.only("detailsPage", async() => {
+    it('goToDetailsPageAndGoBack', async () => {
+      expect(await segmentBuilder.goToDetailsPageAndGoBack()).to.be.true
+    })
+  })
 })    
 
 afterEach(async () => {

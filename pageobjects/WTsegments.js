@@ -23,7 +23,7 @@ export default class SegmentBuilder {
         //await this.page.waitFor(5000)
         //await this.page.click('body > main > div > div > div > div:nth-child(2) > div > div.account-groups > div:nth-child(2) > div > a')
         await this.page.waitFor(25000)
-        await this.page.screenshot({ path: 'screenshots/segmentLogin.png' })
+        await this.page.screenshot({ path: 'screenshots/segmentBuilder/segmentLogin.png' })
     }
     async logoExist () {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div:nth-child(1) > div > div > span.section-header__title > span > img') !== null
@@ -296,7 +296,25 @@ export default class SegmentBuilder {
             expect(numDiffPixel).equal(0)
         }
     }
-
+    // test only check that the modal is disappear
+    // TODO but need to test that current segment is deleted checking by name or by count of segments
+    async deleteSegment() {
+        await this.page.hover('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(3)')
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(3) > td:nth-child(6) > button:nth-child(2)')
+        await this.page.waitForSelector('body > div > div.fade.danger.modal-fixed.in.modal > div > div', {visible: true})
+        await this.page.$('body > div > div.fade.danger.modal-fixed.in.modal > div > div > div.modal-footer > button.delete.with-text.btn.btn-primary') !== null
+        await this.page.click('body > div > div.fade.danger.modal-fixed.in.modal > div > div > div.modal-footer > button.delete.with-text.btn.btn-primary')
+        await this.page.waitFor(3000)
+        return await this.page.$('body > div > div.fade.danger.modal-fixed.in.modal > div > div > div.modal-footer > button.delete.with-text.btn.btn-primary') == null
+    }
+    async cancelDeleteSegment() {
+        await this.page.hover('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(3)')
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(3) > td:nth-child(6) > button:nth-child(2)')
+        await this.page.waitForSelector('body > div > div.fade.danger.modal-fixed.in.modal > div > div', {visible: true})
+        await this.page.$('body > div > div.fade.danger.modal-fixed.in.modal > div > div > div.modal-footer > button.primary.with-text.btn.btn-link') !== null
+        await this.page.click('body > div > div.fade.danger.modal-fixed.in.modal > div > div > div.modal-footer > button.primary.with-text.btn.btn-link')
+        return await this.page.$('body > div > div.fade.danger.modal-fixed.in.modal > div > div > div.modal-footer > button.primary.with-text.btn.btn-link') == null
+    }
     async cancelDeleteSegmentUsedByOtherSegment() {
         await this.page.hover('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(2)')
         await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(2) > td:nth-child(6) > button:nth-child(2)')
@@ -305,5 +323,20 @@ export default class SegmentBuilder {
         await this.page.click('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button')
         return await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button') == null
     }
+    async cancelDeleteSegmentUsedByTest() {
+        await this.page.hover('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(4)')
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(4) > td:nth-child(6) > button:nth-child(2)')
+        await this.page.waitForSelector('body > div > div.fade.warning.modal-fixed.in.modal > div > div', {visible: true})
+        await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button') !== null
+        await this.page.click('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button')
+        return await this.page.$('body > div > div.fade.warning.modal-fixed.in.modal > div > div > div.modal-footer > button') == null
+    }
 
+    async goToDetailsPageAndGoBack() {
+        await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(2) > td:nth-child(6) > button:nth-child(2)')
+        await this.page.waitForSelector('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div:nth-child(2) > button', {visible: true})
+        await this.page.click('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div:nth-child(2) > button', {visible: true})
+        await this.page.waitFor(1000)        
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div:nth-child(2) > button') == null
+    }
 }
