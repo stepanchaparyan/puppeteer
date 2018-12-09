@@ -23,12 +23,12 @@ export default class SegmentBuilder {
         //await this.page.waitFor(5000)
         //await this.page.click('body > main > div > div > div > div:nth-child(2) > div > div.account-groups > div:nth-child(2) > div > a')
         await this.page.waitFor(25000)
-        await this.page.screenshot({ path: 'screenshots/segmentLogin.png' })
+        await this.page.screenshot({ path: 'screenshots/segmentBuilder/segmentLogin.png' })
     }
         
     async goToAddSegmentPage() {
         await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(1) > div > div > span.section-header__toolbar > button > svg')
-        await this.page.screenshot({ path: 'screenshots/addSegmentsPage.png' })
+        await this.page.screenshot({ path: 'screenshots/segmentBuilder/addSegmentsPage.png' })
     }
     async sectionCreateSegmentExist() {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-header.row > div > div:nth-child(1) > div > span') !== null
@@ -36,18 +36,42 @@ export default class SegmentBuilder {
     async segmentNameInputExist() {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-header.row > div > div:nth-child(1) > div > input') !== null
     }    
+    async segmentNamePlaceholder() {
+        const placeholder = await this.page.$eval('body > main > div > div.app-content.row > div > div > div > div.segment-header.row > div > div:nth-child(1) > div > input', el => el.placeholder);
+        return await placeholder
+    } 
     async segmentDescriptionTitleExist () {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-header.row > div > div:nth-child(2) > div > span:nth-child(1)') !== null
     }
     async segmentDescriptionInputExist () {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-header.row > div > div:nth-child(2) > div > input') !== null
     }
+    async segmentDescriptionPlaceholder() {
+        const placeholder = await this.page.$eval('body > main > div > div.app-content.row > div > div > div > div.segment-header.row > div > div:nth-child(2) > div > input', el => el.placeholder);
+        return await placeholder
+    } 
     async segmentCreatedDateExist () {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-header.row > div > div:nth-child(2) > div > span.text-label.flex--align-self-start > span > span') !== null
+    }
+    async segmentCreatedDate () {
+        const date = await this.page.$eval('body > main > div > div.app-content.row > div > div > div > div.segment-header.row > div > div:nth-child(2) > div > span.text-label.flex--align-self-start > span > span > b', el => el.innerText)
+        return await date
+    }
+    async today () {
+        let today = new Date()
+        const dd = today.getDate()
+        const mm = today.getMonth()+1
+        const yyyy = today.getFullYear()
+        today = mm+'/'+dd+'/'+yyyy
+        return await today
     }
     async dropAttributeHereFieldExist () {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.filter-sandbox.col-xs-8 > div > article > span') !== null
     }
+    async segmentDropAttributeHereInnerText() {
+        const innerText = await this.page.$eval('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.filter-sandbox.col-xs-8 > div > article > span', el => el.innerText);
+        return await innerText
+    } 
     async droppableSectionArrowExist () {
         return await this.page.$('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.filter-sandbox.col-xs-8 > div > article > svg > path') !== null
     }   
@@ -190,6 +214,16 @@ export default class SegmentBuilder {
         })
         return subCategories 
     }
+
+    async cancelAddSegmentButton () {
+
+        return 8 
+    }
+    async saveSegmentWithoutName () {
+
+        return 8 
+    }
+
 
 
 }

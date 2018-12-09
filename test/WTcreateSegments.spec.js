@@ -29,18 +29,30 @@ describe(`addSegment page's elements exist`, async () => {
   it('segmentNameInputExist', async () => {
     expect(await segmentBuilder.segmentNameInputExist()).to.be.true; 
   })
+  it('segmentNameInputExist', async () => {
+    expect(await segmentBuilder.segmentNamePlaceholder()).equal('Enter Your Segment Name Here...')
+  })
   it('segmentDescriptionTitleExist', async () => {
     expect(await segmentBuilder.segmentDescriptionTitleExist()).to.be.true; 
   })
   it('segmentDescriptionInputExist', async () => {
     expect(await segmentBuilder.segmentDescriptionInputExist()).to.be.true; 
   })
+  it('segmentNameInputExist', async () => {
+    expect(await segmentBuilder.segmentDescriptionPlaceholder()).equal('Enter your description here...')
+  })  
   it('segmentCreatedDateExist', async () => {
     expect(await segmentBuilder.segmentCreatedDateExist()).to.be.true; 
   })
+  it('segmentCreatedDayIsToday', async () => {
+    expect(await segmentBuilder.segmentCreatedDate()).equal(await segmentBuilder.today())
+  })   
   it('dropAttributeHereFieldExist', async () => {
     expect(await segmentBuilder.dropAttributeHereFieldExist()).to.be.true; 
   })
+  it('segmentDropAttributeHereInnerText', async () => {
+    expect(await segmentBuilder.segmentDropAttributeHereInnerText()).equal('Drop Attributes here')
+  })   
   it('droppableSectionArrowExist', async () => {
     expect(await segmentBuilder.droppableSectionArrowExist()).to.be.true; 
   })
@@ -129,6 +141,24 @@ describe(`segments' categories exist`, async () => {
     }) 
   })
 
+})
+
+describe(`addSegment page's functionality`, async () => {
+  beforeEach(async () => {
+    segmentBuilder = new SegmentBuilder(page)
+    await segmentBuilder.open()
+    await segmentBuilder.logIn()
+    await segmentBuilder.goToAddSegmentPage()
+  })
+  it.only('cancelAddSegmentButton', async () => {
+    expect(await segmentBuilder.cancelAddSegmentButton()).to.be.true; 
+  })
+  it.only('saveSegmentWithoutName', async () => {
+    expect(await segmentBuilder.saveSegmentWithoutName()).to.be.true; 
+  })
+  // it('saveSegment', async () => {
+  //   expect(await segmentBuilder.saveSegment()).to.be.true; 
+  // })
 })
 
 afterEach(async () => {

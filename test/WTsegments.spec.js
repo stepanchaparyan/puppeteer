@@ -136,7 +136,7 @@ describe.only(`first page's functionality`, async () => {
     it('searchSegment', async () => {
       expect(await segmentBuilder.searchSegment()).equal(2) 
     })
-    it('gotToAddSegmentpage', async () => {
+    it('gotToAddSegmentPage', async () => {
       expect(await segmentBuilder.gotoAddSegmentPage()).to.be.true; 
     })
   })  
