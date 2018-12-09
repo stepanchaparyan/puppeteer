@@ -6,13 +6,10 @@ import CREDS from "../creds"
     headless: false
   })
 
-
   const page = await browser.newPage()
-  
   await page.setViewport({width: 1200, height: 800, deviceScaleFactor: 1});
 
-
-  await page.goto('https://app.webtrends-optimize.com/optimize/manage/segments')
+  await page.goto('https://app.webtrends-optimize.com/optimize')
   await page.waitFor(1000)
   await page.waitForSelector('#emailInput')
   await page.type('#emailInput', CREDS.usernameSm)
@@ -20,9 +17,23 @@ import CREDS from "../creds"
   await page.click('.submit-button')
   await page.waitFor(17000)
 
-  await page.click('body > main > div > div.app-content.row > div > div > div:nth-child(1) > div > div > span.section-header__toolbar > button > svg')
-  await page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(4)')
-  
+  await page.click('body > main > div > div:nth-child(2) > div > div > nav > div > div')
+  await page.waitFor(3000)
+  await page.click('body > main > div > div:nth-child(2) > div > div > div > div > div > div:nth-child(1) > div:nth-child(3) > ul > li:nth-child(1) > a')
+  await page.waitFor(3000)
+  await page.click('body > main > div > div.app-content.row > div > form > div.intro.intro-info.ae-intro > div > div.intro__action-container.col-sm-1 > button')
+  await page.waitFor(3000)
+  await page.type('body > main > div > div.app-content.row > div > form > div.wrapper.horizontal-padding-0 > div > div > div > div.col-md-6.col-md-offset-1.col-sm-12 > div:nth-child(1) > div > div > div.col-xs-9 > div:nth-child(1) > div > input', 'orinak1')
+  await page.type('body > main > div > div.app-content.row > div > form > div.wrapper.horizontal-padding-0 > div > div > div > div.col-md-6.col-md-offset-1.col-sm-12 > div:nth-child(2) > div > div > div.col-xs-9 > div:nth-child(1) > div > input', 'orinak2')
+
+  await page.click('#react-select-2--value')
+  await page.evaluate(() => {
+    document.querySelector(`select [value="asas"]`).selected = true;
+  });
+  await page.screenshot({path: 'screenshots/3.png'})
+
+
+
   const element = await page.$('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.col-xs-4 > section > div > ul > li:nth-child(2)')
   const drugableArea = await page.$('body > main > div > div.app-content.row > div > div > div > div.segment-content.create.row > div.filter-sandbox.col-xs-8 > div > article')
   const box = await element.boundingBox()

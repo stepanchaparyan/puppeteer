@@ -216,14 +216,13 @@ export default class SegmentBuilder {
     }
 
     async cancelAddSegmentButton () {
-
-        return 8 
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-footer.row > button.primary.with-text.btn.btn-link') 
+        return await this.page.$('body > main > div > div.app-content.row > div > div > div:nth-child(1) > div > div > span.section-header__title > h1') !== null
     }
     async saveSegmentWithoutName () {
-
-        return 8 
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-footer.row > button.primary.with-text.btn.btn-primary') 
+        return await this.page.$('#test-popover') !== null
     }
-
 
 
 }
