@@ -8,7 +8,7 @@ const showUI = {headless: false}
 const showSlowMotion = {headless: false, slowMo: 300}
 
 beforeEach(async () => {
-  browser = await puppeteer.launch(showUI)
+  browser = await puppeteer.launch()
   page = await browser.newPage()
   await page.setViewport(viewport)
 })
@@ -137,7 +137,7 @@ describe.only("first page's functionality", async () => {
       expect(await segmentBuilder.gotoAddSegmentPage()).to.be.true; 
     })
   })  
-  context.only("updateSegment", async() => {
+  context("updateSegment", async() => {
     it('usedSegmentModalExist', async () => {
       await segmentBuilder.makeScreenshotForSegUsedSegmentUpdate()
       await segmentBuilder.updateSegUsedSegmentModal()
@@ -146,7 +146,7 @@ describe.only("first page's functionality", async () => {
       await segmentBuilder.makeScreenshotForTestUsedSegmentUpdate()
       await segmentBuilder.updateTestUsedSegmentModal()
     })
-    it.only('updateSegment', async () => {
+    it('updateSegment', async () => {
       expect(await segmentBuilder.updateSegment()).to.be.true; 
     }) 
     it('cancelUpdateSegmentUsedByOtherSegment', async () => {

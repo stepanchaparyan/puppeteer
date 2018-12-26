@@ -18,8 +18,6 @@ module.exports = {
         ROW_HEADER_SEGMENTS_MODIFIED: 'body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > thead > tr > th:nth-child(4)',            
         ROW_HEADER_SEGMENTS_CREATED: 'body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > thead > tr > th:nth-child(5)',    
         EDIT_BUTTON_SEGMENT_USED: 'body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(10) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg',        
-        //EDIT_BUTTON_TEST_USED: 'body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(2) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg',
-        //EDIT_BUTTON_NOT_USED: 'body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(3) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg',
         WARNING_MODAL: 'body > div > div.fade.warning.modal-fixed.in.modal > div > div',
         DANGER_MODAL: 'body > div > div.fade.danger.modal-fixed.in.modal > div > div',
         DANGER_MODAL_DELETE_BUTTON: 'body > div > div.fade.danger.modal-fixed.in.modal > div > div > div.modal-footer > button.delete.with-text.btn.btn-primary',
@@ -37,7 +35,9 @@ module.exports = {
         DETAILS_PAGE_BACK_BUTTON: 'body > main > div > div.app-content.row > div > div > div.segments-filter.row > div:nth-child(2) > button',
         SCREENSHOTS: 'screenshots/segmentBuilder',
         TEMPORARY_SCREENSHOTS: 'screenshots/segmentBuilder/temporaryScreenshots',
-        CREATE_SEGMENT_PAGE_LABEL_EDIT_SEGMENT: 'body > main > div > div.app-content.row > div > div > div > div.segment-header.row > div > div:nth-child(1) > div > span.section-label.section-label__edit'
+        CREATE_SEGMENT_PAGE_LABEL_EDIT_SEGMENT: 'body > main > div > div.app-content.row > div > div > div > div.segment-header.row > div > div:nth-child(1) > div > span.section-label.section-label__edit',
+        EDIT_SEGMENT_SELECT_FIELD: 'body > main > div > div.app-content.row > div > div > div > div.segment-content.edit.row > div.filter-sandbox.col-xs-8 > ul > li > ul > li > ul > article > li > span > section > span:nth-child(2) > div',
+        EDIT_SEGMENT_SAVE_BUTTON: 'body > main > div > div.app-content.row > div > div > div > div.segment-footer.row > button.primary.with-text.btn.btn-primary',
     }
 
 

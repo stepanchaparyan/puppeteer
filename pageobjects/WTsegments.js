@@ -22,14 +22,12 @@ export default class SegmentBuilder {
         await this.page.click('.submit-button')
         //await this.page.waitFor(5000)
         //await this.page.click('body > main > div > div > div > div:nth-child(2) > div > div.account-groups > div:nth-child(2) > div > a')
-        await this.page.waitFor(25000)
+        await this.page.waitFor(20000)
         //await this.page.screenshot({ path: 'screenshots/segmentBuilder/segmentLogin.png' })
     }
     // segment Header elements
     async logoExist () {
         return await this.page.$(SEGMENTS.SECTION_HEADER + 'span.section-header__title > span > img') !== null
-        //return await this.page.$(SEGMENTS_SECTION_HEADER + 'span.section-header__title > span > img') !== null
-
     }    
     async titleExist () {
         return await this.page.$(SEGMENTS.SECTION_HEADER + 'span.section-header__title > h1') !== null
@@ -187,7 +185,7 @@ export default class SegmentBuilder {
         await this.page.click(SEGMENTS.TABLE_ROW + `(${number}) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg`)
         await this.page.waitForSelector(SEGMENTS.WARNING_MODAL, {visible: true})
         const overlay = await this.page.$(SEGMENTS.WARNING_MODAL)  
-        await this.page.waitFor(1000)
+        await this.page.waitFor(3000)
         await overlay.screenshot({path: SEGMENTS.TEMPORARY_SCREENSHOTS + '/updateSegUsedSegment1.png'})
     }
     async makeScreenshotForTestUsedSegmentUpdate() {
@@ -196,7 +194,7 @@ export default class SegmentBuilder {
         await this.page.click(SEGMENTS.TABLE_ROW + `(${number}) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg`)
         await this.page.waitForSelector(SEGMENTS.WARNING_MODAL, {visible: true})
         const overlay = await this.page.$(SEGMENTS.WARNING_MODAL)  
-        await this.page.waitFor(1000)
+        await this.page.waitFor(3000)
         await overlay.screenshot({path: SEGMENTS.TEMPORARY_SCREENSHOTS + '/updateTestUsedSegment1.png'})
     }
     async updateSegUsedSegmentModal () {
@@ -222,8 +220,8 @@ export default class SegmentBuilder {
             if (++filesRead < 2) return
             let diff = new PNG({width: img1.width, height: img1.height})
             numDiffPixel = pixelmatch(img1.data, img2.data, diff.data, img1.width, img1.height, {threshold: 0.1})
-            console.log("pixel diff is: " + numDiffPixel)
-            diff.pack().pipe(fs.createWriteStream('SEGMENTS.TEMPORARY_SCREENSHOTS + /segmentBuilder/diff2.png'))
+            //console.log("pixel diff is: " + numDiffPixel)
+            //diff.pack().pipe(fs.createWriteStream(SEGMENTS.TEMPORARY_SCREENSHOTS + '/diff2.png'))
             expect(numDiffPixel).be.below(10)
         }
     }
@@ -237,42 +235,24 @@ export default class SegmentBuilder {
         }
         return await i
     }
-    // edit/update segment which is not used by other test/target or segment
-    // we just tested that we go to edit mode
-    // TODO real test for update
+    // edit/update segment 
     async updateSegment() {
-        const number = await this.getCorrespondingRow('for_testing_for_updating')
-        await this.page.hover(SEGMENTS.TABLE_ROW + `(${number})`)
-        await this.page.click(SEGMENTS.TABLE_ROW + `(${number}) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg`)
-        await this.page.waitFor(4000)   
-        await this.page.click('#Afghanistan')
-        await this.page.waitFor(2000)    
-
-        await this.page.screenshot({path: SEGMENTS.TEMPORARY_SCREENSHOTS + '/111dzzzzzzz1.png'})
- 
-        // albania
-        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.edit.row > div.filter-sandbox.col-xs-8 > ul > li > ul > li > ul > article > li > span > section > span:nth-child(2) > div > ul > li:nth-child(3) > a')
-        await this.page.waitFor(2000)      
-
-        await this.page.screenshot({path: SEGMENTS.TEMPORARY_SCREENSHOTS + '/2222dzzzzzzz1.png'})
-        // save
-        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-footer.row > button.primary.with-text.btn.btn-primary')
-        await this.page.waitFor(3000) 
-
-        await this.page.screenshot({path: SEGMENTS.TEMPORARY_SCREENSHOTS + '/3333dzzzzzzz1.png'})
-
-        await this.page.hover(SEGMENTS.TABLE_ROW + `(${number})`)
-        await this.page.click(SEGMENTS.TABLE_ROW + `(${number}) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg`)
-        //await this.page.click('body > main > div > div.app-content.row > div > div > div > div.segment-content.edit.row > div.filter-sandbox.col-xs-8 > ul > li > ul > li > ul > article > li > span > section > span:nth-child(2) > div > ul > li:nth-child(3) > a')
-        await this.page.waitFor(2000)       
-        await this.page.screenshot({path: SEGMENTS.TEMPORARY_SCREENSHOTS + '/4444dzzzzzzz1.png'})
-
-        // get element inner text and compare
-        return await this.page.$(SEGMENTS.CREATE_SEGMENT_PAGE_LABEL_EDIT_SEGMENT) !== null
-
-        // we ոչ թե որ Աֆղանստան է կամ Ալբանիա, այլ Աֆղանստան չի, որ կարողանանք ոչ թե մի անգամ տեստ քշենք, այլ շատ անգամներ, հակառակ դեպքում երկորդր 
-        // տեստ ժամանակ էլ Աֆղանստան չի լինի, այլ ԱԼբանիա ու տեստ չի անցնի, իսկ եթե ստուգի որ ուղղակի Աֆգանստան չի, քանի որ ընտրել ա հաջորդը, թեստը շատ անգամներ կանցնի 
-        // գոնե ենքան, ինչքան երկիր կա ։
+        const rowNumber = await this.getCorrespondingRow('for_testing_for_updating')
+        await this.page.hover(SEGMENTS.TABLE_ROW + `(${rowNumber})`)
+        await this.page.click(SEGMENTS.TABLE_ROW + `(${rowNumber}) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg`)
+        await this.page.waitForSelector(SEGMENTS.EDIT_SEGMENT_SELECT_FIELD)
+        const selectedElementInnerTextBeforEditing = await this.page.$eval(SEGMENTS.EDIT_SEGMENT_SELECT_FIELD, element => element.innerText);
+        await this.page.click(SEGMENTS.EDIT_SEGMENT_SELECT_FIELD)
+        var randomNumber = Math.floor(Math.random() * 240) + 2; 
+        await this.page.click(SEGMENTS.EDIT_SEGMENT_SELECT_FIELD + `> ul > li:nth-child(${randomNumber}) > a`)
+        await this.page.click(SEGMENTS.EDIT_SEGMENT_SAVE_BUTTON)
+        await this.page.waitFor(2000) 
+        await this.page.hover(SEGMENTS.TABLE_ROW + `(${rowNumber})`)
+        await this.page.click(SEGMENTS.TABLE_ROW + `(${rowNumber}) > td.td--buttons > button.icon-button.edit.btn.btn-link > svg`)
+        await this.page.waitForSelector(SEGMENTS.EDIT_SEGMENT_SELECT_FIELD)
+        const selectedElementInnerTextAfterEditing = await this.page.$eval(SEGMENTS.EDIT_SEGMENT_SELECT_FIELD, element => element.innerText);
+        const notMatch = selectedElementInnerTextBeforEditing !== selectedElementInnerTextAfterEditing
+        return notMatch
     }
     // cancel button on update modal if segment used by other segment
     async cancelUpdateSegmentUsedByOtherSegment() {
