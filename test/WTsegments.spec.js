@@ -1,8 +1,5 @@
 import { expect } from 'chai'
 import puppeteer from 'puppeteer'
-import fs from 'fs-extra'
-import { PNG } from 'pngjs'
-import pixelmatch from "pixelmatch"
 import SegmentBuilder from '../pageobjects/WTsegments'
 
 let browser, page, segmentBuilder
@@ -11,12 +8,12 @@ const showUI = {headless: false}
 const showSlowMotion = {headless: false, slowMo: 300}
 
 beforeEach(async () => {
-  browser = await puppeteer.launch()
+  browser = await puppeteer.launch(showUI)
   page = await browser.newPage()
   await page.setViewport(viewport)
 })
 
-describe(`Segment Builder first page's elements exist`, async () => {
+describe("Segment Builder first page's elements exist", async () => {
   beforeEach(async () => {
     segmentBuilder = new SegmentBuilder(page)
     await segmentBuilder.open()
@@ -92,55 +89,55 @@ describe(`Segment Builder first page's elements exist`, async () => {
   })
 })
 
-describe.only(`first page's functionality`, async () => {
+describe.only("first page's functionality", async () => {
   beforeEach(async () => {
     segmentBuilder = new SegmentBuilder(page)
     await segmentBuilder.open()
     await segmentBuilder.logIn()
   })
   context("orderSegmentsByUse", async() => {
-    it('InUseWorks', async () => {
+    it('orderByInUse', async () => {
       expect(await segmentBuilder.orderByInUse()).to.be.true; 
     })
-    it('notInUseWorks', async () => {
+    it('orderByNotInUse', async () => {
       expect(await segmentBuilder.orderByNotInUse()).to.be.true; 
     })
     it('inUseSegmentsCount', async () => {
-      expect(await segmentBuilder.inUseSegmentsCount()).equal(8); 
+      expect(await segmentBuilder.inUseSegmentsCount()).equal(9); 
     })
     it('notInUseSegmentsCount', async () => {
-      expect(await segmentBuilder.notInUseSegmentsCount()).equal(2) 
+      expect(await segmentBuilder.notInUseSegmentsCount()).equal(4) 
     })
     it('allSegmentsCount', async () => {
-      expect(await segmentBuilder.allSegmentsCount()).equal(10) 
+      expect(await segmentBuilder.allSegmentsCount()).equal(13) 
     })
   })
   context("orderSegmentsByHeader", async() => {
     it('orderBySegmentsName', async () => {
-      expect(await segmentBuilder.orderBySegmentsName()).to.deep.equal([ "Armenia", "Armenia 2" ])
+      expect(await segmentBuilder.orderBySegmentsName()).to.deep.equal([ "Armenia", "Armenia2" ])
     })
     it('orderByID', async () => {
-      expect(await segmentBuilder.orderByID()).equal(1883375)
+      expect(await segmentBuilder.orderByID()).equal(1888514)
     })
     it('orderByUseCount', async () => {
-      expect(await segmentBuilder.orderByUseCount()).equal(3); 
+      expect(await segmentBuilder.orderByUseCount()).equal(4); 
     })
     it('orderByModified', async () => {
-      expect(await segmentBuilder.orderByModified()).to.deep.equal([ '12/4/2018' ]) 
+      expect(await segmentBuilder.orderByModified()).to.deep.equal([ '12/21/2018' ]) 
     })
     it('orderByCreated', async () => {
-      expect(await segmentBuilder.orderByCreated()).to.deep.equal([ '12/4/2018' ]) 
+      expect(await segmentBuilder.orderByCreated()).to.deep.equal([ '12/21/2018' ]) 
     })
   })
   context("navBarSegments", async() => {
     it('searchSegment', async () => {
-      expect(await segmentBuilder.searchSegment()).equal(2) 
+      expect(await segmentBuilder.searchSegment()).equal(3) 
     })
     it('gotToAddSegmentPage', async () => {
       expect(await segmentBuilder.gotoAddSegmentPage()).to.be.true; 
     })
   })  
-  context("updateSegment", async() => {
+  context.only("updateSegment", async() => {
     it('usedSegmentModalExist', async () => {
       await segmentBuilder.makeScreenshotForSegUsedSegmentUpdate()
       await segmentBuilder.updateSegUsedSegmentModal()
@@ -149,7 +146,7 @@ describe.only(`first page's functionality`, async () => {
       await segmentBuilder.makeScreenshotForTestUsedSegmentUpdate()
       await segmentBuilder.updateTestUsedSegmentModal()
     })
-    it('updateSegment', async () => {
+    it.only('updateSegment', async () => {
       expect(await segmentBuilder.updateSegment()).to.be.true; 
     }) 
     it('cancelUpdateSegmentUsedByOtherSegment', async () => {
@@ -171,7 +168,7 @@ describe.only(`first page's functionality`, async () => {
       await segmentBuilder.makeScreenshotForTestUsedSegmentDelete()
       await segmentBuilder.deleteTestUsedSegmentModal()
     })
-    it('deleteSegment', async () => {
+    it.skip('deleteSegment', async () => {
       expect(await segmentBuilder.deleteSegment()).to.be.true
     }) 
     it('cancelDeleteSegment', async () => {

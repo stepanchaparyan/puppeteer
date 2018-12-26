@@ -104,33 +104,33 @@ export default class LocationManager {
     }
     async inUseLocationsCount () {
         await this.page.click('body > main > div > div.app-content.row > div > div > div > div.locationsFilter.row > div > span:nth-child(2)')
-        const inUseLocationsCount = await this.page.$$eval('body > main > div > div.app-content.row > div > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(2)', locations => locations.length);
+        const inUseLocationsCount = await this.page.$$eval('body > main > div > div.app-content.row > div > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(2)', locations => locations.length)
         return await inUseLocationsCount
     }
     async orderByNotInUse () {
-        await this.page.click('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div > span:nth-child(3)')
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.locationsFilter.row > div > span:nth-child(3)')
         const isZero = (currentValue) => currentValue == 0 
-        const notInUseSegments = await this.page.evaluate(() => {
-            const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)'))
+        const notInUseLocations = await this.page.evaluate(() => {
+            const cards = Array.from(document.querySelectorAll('body > main > div > div.app-content.row > div > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(2)'))
             return cards.map(card => card.innerText)
         })
-        return await notInUseSegments.every(isZero)
+        return await notInUseLocations.every(isZero)
     }
     async notInUseLocationsCount () {
-        await this.page.click('body > main > div > div.app-content.row > div > div > div.segments-filter.row > div > span:nth-child(3)')
-        const notInUseSegmentsCount = await this.page.$$eval('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)', segments => segments.length);
-        return await notInUseSegmentsCount
+        await this.page.click('body > main > div > div.app-content.row > div > div > div > div.locationsFilter.row > div > span:nth-child(3)')
+        const notInUseLocationsCount = await this.page.$$eval('body > main > div > div.app-content.row > div > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(2)', locations => locations.length)
+        return await notInUseLocationsCount
     }
     async allLocationsCount () {
-        const allSegmentsCount = await this.page.$$eval('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)', segments => segments.length);
-        return await allSegmentsCount
+        const allLocationsCount = await this.page.$$eval('body > main > div > div.app-content.row > div > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(2)', locations => locations.length)
+        return await allLocationsCount
     }
 
     //  
     async searchSegment () {
         await this.page.click('body > main > div > div.app-content.row > div > div > div:nth-child(1) > div > div > span.section-header__toolbar > div > input')
         await this.page.type('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)', 'Arm')
-        const allSegmentsCount = await this.page.$$eval('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)', segments => segments.length);
+        const allSegmentsCount = await this.page.$$eval('body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr > td:nth-child(3)', segments => segments.length)
         return await allSegmentsCount
     }
     async gotoAddSegmentPage () {

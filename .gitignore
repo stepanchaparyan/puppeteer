@@ -1,3 +1,11 @@
 /node_modules
+/screenshots/segmentBuilder/temporaryScreenshots
 creds.js
+package-lock.json
+.git
+.*.swp
+._*
+npm-debug.log
+.npmrc
+
 

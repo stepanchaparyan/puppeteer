@@ -99,20 +99,20 @@ describe(`Location Manager first page's functionality`, async () => {
     await locationManager.logIn()
   })
   context.only("orderLocationsByUse", async() => {
-    it.only('InUseWorks', async () => {
+    it('InUseWorks', async () => {
       expect(await locationManager.orderByInUse()).to.be.true; 
     })
     it('notInUseWorks', async () => {
       expect(await locationManager.orderByNotInUse()).to.be.true; 
     })
-    it.only('inUseLocationsCount', async () => {
+    it('inUseLocationsCount', async () => {
       expect(await locationManager.inUseLocationsCount()).equal(11); 
     })
     it('notInUseLocationsCount', async () => {
-      expect(await locationManager.notInUseLocationsCount()).equal(2) 
+      expect(await locationManager.notInUseLocationsCount()).equal(3) 
     })
-    it('allLocationsCount', async () => {
-      expect(await locationManager.allLocationsCount()).equal(10) 
+    it.only('allLocationsCount', async () => {
+      expect(await locationManager.allLocationsCount()).equal(14) 
     })
   })
   context("orderSegmentsByHeader", async() => {
