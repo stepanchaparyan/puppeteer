@@ -1,11 +1,10 @@
 import { expect } from 'chai'
 import puppeteer from 'puppeteer'
-import fs from 'fs-extra'
-import { PNG } from 'pngjs'
-import pixelmatch from "pixelmatch"
-import LocationManager from '../pageobjects/WTlocations';
+import LocationManager from '../src/pageobjects/WTlocations';
+import LoginPage from '../src/pageobjects/WTLoginPage';
 
-let browser, page, locationManager
+let browser, page, loginPage, locationManager
+let locations = 'manage/locations'
 const viewport = { width: 1920, height: 1080 }
 const showUI = {headless: false}
 const showSlowMotion = {headless: false, slowMo: 300}
@@ -14,15 +13,14 @@ beforeEach(async () => {
   browser = await puppeteer.launch()
   page = await browser.newPage()
   await page.setViewport(viewport)
+  locationManager = new LocationManager(page)
+  loginPage = new LoginPage(page)
+  await loginPage.open(locations)
+  await loginPage.logIn()
 })
 
 describe(`Location Manager first page's elements exist`, async () => {
-  beforeEach(async () => {
-    locationManager = new LocationManager(page)
-    await locationManager.open()
-    await locationManager.logIn()
-  })
-  context("mainPart", async() => {
+  context("pageHeader", async() => {
     it('logoExist', async () => {
       expect(await locationManager.logoExist()).to.be.true; 
     })
@@ -93,12 +91,7 @@ describe(`Location Manager first page's elements exist`, async () => {
 })
 
 describe(`Location Manager first page's functionality`, async () => {
-  beforeEach(async () => {
-    locationManager = new LocationManager(page)
-    await locationManager.open()
-    await locationManager.logIn()
-  })
-  context.only("orderLocationsByUse", async() => {
+  context("orderLocationsByUse", async() => {
     it('InUseWorks', async () => {
       expect(await locationManager.orderByInUse()).to.be.true; 
     })
@@ -106,87 +99,70 @@ describe(`Location Manager first page's functionality`, async () => {
       expect(await locationManager.orderByNotInUse()).to.be.true; 
     })
     it('inUseLocationsCount', async () => {
-      expect(await locationManager.inUseLocationsCount()).equal(11); 
+      expect(await locationManager.inUseLocationsCount()).equal(14); 
     })
     it('notInUseLocationsCount', async () => {
-      expect(await locationManager.notInUseLocationsCount()).equal(3) 
+      expect(await locationManager.notInUseLocationsCount()).equal(6) 
     })
-    it.only('allLocationsCount', async () => {
-      expect(await locationManager.allLocationsCount()).equal(14) 
+    it('allLocationsCount', async () => {
+      expect(await locationManager.allLocationsCount()).equal(20) 
     })
   })
-  context("orderSegmentsByHeader", async() => {
-    it('orderBySegmentsName', async () => {
-      expect(await segmentBuilder.orderBySegmentsName()).to.deep.equal([ "Armenia", "Armenia 2" ])
+  context("orderLocationsByHeader", async() => {
+    it('orderByLocationName', async () => {
+      expect(await locationManager.orderByLocationName()).to.deep.equal([ "WT222", "WT111" ])
     })
-    it('orderByID', async () => {
-      expect(await segmentBuilder.orderByID()).equal(1883375)
+    it('orderByPageUseCount', async () => {
+      expect(await locationManager.orderByPageUseCount()).equal(3)
     })
-    it('orderByUseCount', async () => {
-      expect(await segmentBuilder.orderByUseCount()).equal(3); 
+    it('orderByConversionUseCount', async () => {
+      expect(await locationManager.orderByConversionUseCount()).equal(2); 
     })
     it('orderByModified', async () => {
-      expect(await segmentBuilder.orderByModified()).to.deep.equal([ '12/4/2018' ]) 
+      expect(await locationManager.orderByModified()).to.deep.equal([ '1/15/2019' ]) 
     })
     it('orderByCreated', async () => {
-      expect(await segmentBuilder.orderByCreated()).to.deep.equal([ '12/4/2018' ]) 
+      expect(await locationManager.orderByCreated()).to.deep.equal([ '1/15/2019' ]) 
     })
   })
-  context("navBarSegments", async() => {
-    it('searchSegment', async () => {
-      expect(await segmentBuilder.searchSegment()).equal(2) 
+  context("navBarLocations", async() => {
+    it('searchLocation', async () => {
+      expect(await locationManager.searchLocation()).equal(3) 
     })
-    it('gotToAddSegmentPage', async () => {
-      expect(await segmentBuilder.gotoAddSegmentPage()).to.be.true; 
+    it('gotoAddLocationPage', async () => {
+      expect(await locationManager.gotoAddLocationPage()).to.be.true; 
     })
   })  
-  context("updateSegment", async() => {
-    it('usedSegmentModalExist', async () => {
-      await segmentBuilder.makeScreenshotForSegUsedSegmentUpdate()
-      await segmentBuilder.updateSegUsedSegmentModal()
+  context("updateLocation", async() => {
+    it('usedLocationModalExist', async () => {
+      await locationManager.makeScreenshotForUsedLocationUpdate()
+      await locationManager.compareUpdateUsedLocationModal()
     })
-    it('notUsedSegmentModalExist', async () => {
-      await segmentBuilder.makeScreenshotForTestUsedSegmentUpdate()
-      await segmentBuilder.updateTestUsedSegmentModal()
-    })
-    it('updateSegment', async () => {
-      expect(await segmentBuilder.updateSegment()).to.be.true; 
+    it('cancelUpdateForUsedLocation', async () => {
+      expect(await locationManager.cancelUpdateUsedLocation()).to.be.true; 
     }) 
-    it('cancelUpdateSegmentUsedByOtherSegment', async () => {
-      expect(await segmentBuilder.cancelUpdateSegmentUsedByOtherSegment()).to.be.true; 
+    it('updateUsedLocation', async () => {
+      expect(await locationManager.updateUsedLocation()).to.be.true; 
     }) 
-    it('cancelUpdateSegmentUsedByTest', async () => {
-      expect(await segmentBuilder.cancelUpdateSegmentUsedByTest()).to.be.true; 
-    })  
-    it('editSegmentUsedByTest', async () => {
-      expect(await segmentBuilder.editSegmentUsedByTest()).to.be.true; 
+    it('updateNotUsedLocation', async () => {
+      expect(await locationManager.updateNotUsedLocation()).to.be.true; 
     }) 
   })
-  context("deleteSegment", async() => {
-    it('usedSegmentModalExist', async () => {
-      await segmentBuilder.makeScreenshotForSegUsedSegmentDelete()
-      await segmentBuilder.deleteSegUsedSegmentModal()
+  context("deleteLocation", async() => {
+    it('usedLocationModalExist', async () => {
+      await locationManager.makeScreenshotForUsedLocationDelete()
+      await locationManager.compareDeleteUsedLocationModal()
     })
-    it('usedTestModalExist', async () => {
-      await segmentBuilder.makeScreenshotForTestUsedSegmentDelete()
-      await segmentBuilder.deleteTestUsedSegmentModal()
-    })
-    it('deleteSegment', async () => {
-      expect(await segmentBuilder.deleteSegment()).to.be.true
+    it('cancelDeleteUsedLocation', async () => {
+      expect(await locationManager.cancelDeleteUsedLocation()).to.be.true
     }) 
-    it('cancelDeleteSegment', async () => {
-      expect(await segmentBuilder.cancelDeleteSegment()).to.be.true
+    it('deleteLocation', async () => {
+      expect(await locationManager.deleteLocation()).to.be.true
     }) 
-    it('cancelDeleteSegmentUsedByOtherSegment', async () => {
-      expect(await segmentBuilder.cancelDeleteSegmentUsedByOtherSegment()).to.be.true 
-    }) 
-    it('cancelDeleteSegmentUsedByTest', async () => {
-      expect(await segmentBuilder.cancelDeleteSegmentUsedByTest()).to.be.true
-    })  
   })
   context("detailsPage", async() => {
     it('goToDetailsPageAndGoBack', async () => {
-      expect(await segmentBuilder.goToDetailsPageAndGoBack()).to.be.true
+      expect(await locationManager.goToDetailsPageAndGoBack()).to.be.true
     })
   })
 })    

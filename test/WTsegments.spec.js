@@ -1,8 +1,10 @@
 import { expect } from 'chai'
 import puppeteer from 'puppeteer'
-import SegmentBuilder from '../pageobjects/WTsegments'
+import SegmentBuilder from '../src/pageobjects/WTsegments'
+import LoginPage from '../src/pageobjects/WTLoginPage';
 
-let browser, page, segmentBuilder
+let browser, page, loginPage, segmentBuilder
+let segments = 'manage/segments'
 const viewport = { width: 1920, height: 1080 }
 const showUI = {headless: false}
 const showSlowMotion = {headless: false, slowMo: 300}
@@ -11,19 +13,18 @@ beforeEach(async () => {
   browser = await puppeteer.launch()
   page = await browser.newPage()
   await page.setViewport(viewport)
+  segmentBuilder = new SegmentBuilder(page)
+  loginPage = new LoginPage(page)
+  await loginPage.open(segments)
+  await loginPage.logIn()
 })
 
 describe("Segment Builder first page's elements exist", async () => {
-  beforeEach(async () => {
-    segmentBuilder = new SegmentBuilder(page)
-    await segmentBuilder.open()
-    await segmentBuilder.logIn()
-  })
   context("mainPart", async() => {
     it('logoExist', async () => {
       expect(await segmentBuilder.logoExist()).to.be.true; 
     })
-    it('titleExist', async () => {
+    it.only('titleExist', async () => {
       expect(await segmentBuilder.titleExist()).to.be.true; 
     })
     it('searchFieldExist', async () => {
@@ -89,12 +90,7 @@ describe("Segment Builder first page's elements exist", async () => {
   })
 })
 
-describe.only("first page's functionality", async () => {
-  beforeEach(async () => {
-    segmentBuilder = new SegmentBuilder(page)
-    await segmentBuilder.open()
-    await segmentBuilder.logIn()
-  })
+describe("first page's functionality", async () => {
   context("orderSegmentsByUse", async() => {
     it('orderByInUse', async () => {
       expect(await segmentBuilder.orderByInUse()).to.be.true; 

@@ -1,30 +1,13 @@
-import CREDS from "../creds"
 import { expect } from 'chai'
 import fs from 'fs-extra'
 import { PNG } from 'pngjs'
 import pixelmatch from 'pixelmatch'
-import { SEGMENTS } from '../pageobjects/constants/segmentsBuilderConstants.js'
+import { SEGMENTS } from '../constants/segmentsBuilderConstants.js'
 
 export default class SegmentBuilder {
     constructor(page) {
         this.page = page;
     }   
-    async getTitle() {
-        return this.page.title();
-    }
-    async open () {
-        return await this.page.goto('https://app.webtrends-optimize.com/optimize/manage/segments')
-    }
-    async logIn () {
-        await this.page.waitForSelector('#emailInput')
-        await this.page.type('#emailInput', CREDS.usernameSm)
-        await this.page.type('#passwordInput', CREDS.passwordSm)
-        await this.page.click('.submit-button')
-        //await this.page.waitFor(5000)
-        //await this.page.click('body > main > div > div > div > div:nth-child(2) > div > div.account-groups > div:nth-child(2) > div > a')
-        await this.page.waitFor(20000)
-        //await this.page.screenshot({ path: 'screenshots/segmentBuilder/segmentLogin.png' })
-    }
     // segment Header elements
     async logoExist () {
         return await this.page.$(SEGMENTS.SECTION_HEADER + 'span.section-header__title > span > img') !== null
@@ -177,7 +160,16 @@ export default class SegmentBuilder {
         })
         return await orderedSegments.slice(0,1)
     }
-
+    // get corresponding row
+    async getCorrespondingRow(segmentName) {
+        const allSegmentsCount = await this.page.$$eval(SEGMENTS.TABLE_ROWS, segments => segments.length);
+        for (var i = 1; i < allSegmentsCount; i++) {
+            let row = `body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(${i}) > td:nth-child(1)`
+            let anyNextSegment = await this.page.$eval(row, element => element.innerText);
+            if (anyNextSegment == segmentName) { break } 
+        }
+        return await i
+    }
     // test edit modals views by screenshots
     async makeScreenshotForSegUsedSegmentUpdate() {
         const number = await this.getCorrespondingRow('for_testing_segment_used')
@@ -224,16 +216,6 @@ export default class SegmentBuilder {
             //diff.pack().pipe(fs.createWriteStream(SEGMENTS.TEMPORARY_SCREENSHOTS + '/diff2.png'))
             expect(numDiffPixel).be.below(10)
         }
-    }
-    // get corresponding row
-    async getCorrespondingRow(segmentName) {
-        const allSegmentsCount = await this.page.$$eval(SEGMENTS.TABLE_ROWS, segments => segments.length);
-        for (var i = 1; i < allSegmentsCount; i++) {
-            let row = `body > main > div > div.app-content.row > div > div > div:nth-child(3) > div > div > div > table > tbody > tr:nth-child(${i}) > td:nth-child(1)`
-            let anyNextSegment = await this.page.$eval(row, element => element.innerText);
-            if (anyNextSegment == segmentName) { break } 
-        }
-        return await i
     }
     // edit/update segment 
     async updateSegment() {
